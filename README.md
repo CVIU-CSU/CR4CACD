@@ -21,16 +21,16 @@ The implementation of the GRAM and RRAM is in [roi_attention_head.py](mmdet/mode
 We set up 5 config files to realize GRAM and RRAM including different combination strategies. Refer to [configs/roi_annention](configs/roi_attention) for details.
 
 ## Main Results
-Train log of Cascade RRAM and GRAM is in [20211214_100303.log.json](https://drive.google.com/file/d/1HvC_5Z3EKf-BgKo8bJ09evgqwEQ_M2oM/view?usp=sharing). The trained model is available on google driver [here](https://drive.google.com/file/d/1EK41ipU_l5cxRWC0AY0rzh1TtVJKqMed/view?usp=sharing).
+Train log of Cascade RRAM and GRAM is in [20220418_170256.log.json](https://drive.google.com/file/d/1EK41ipU_l5cxRWC0AY0rzh1TtVJKqMed/view?usp=sharing). The trained model is available on google driver [here](https://drive.google.com/file/d/1EK41ipU_l5cxRWC0AY0rzh1TtVJKqMed/view?usp=sharing). The trained model with multi-scale training is available on google driver [here](https://drive.google.com/file/d/1u6wWtWsSnieZorDqPrYPTUYuZUWrMh2D/view?usp=sharing).
 
 
-Model | mAP@50 | mAP@75 | mAP
+Model | mAP | mAP@50 | mAP@75 
 --- |:---:|:---:|:---:
-Faster R-CNN with FPN (baseline) | 50.3 | 29.5 | 28.6
-RRAM | 52.7 | 31.2 | 30.1 
-GRAM | 52.8 | 30.9 | 30.0 
-Cascade RRAM and GRAM | 53.3 | 31.5 | 30.4
-
+Faster R-CNN with FPN (baseline) | 30.9 | 53.9 | 32.2
+RRAM | 32.0 | 56.0 | 32.8 
+GRAM | 31.9 | 56.2 | 33.1 
+Cascade RRAM and GRAM | 32.4 | 56.6 | 33.5
+Cascade RRAM and GRAM (multi-scale training) | 34.2 | 58.6 | 36.0 
 
 ## Contact
 
