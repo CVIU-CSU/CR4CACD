@@ -26,7 +26,8 @@ Train log of Cascade RRAM and GRAM is in [20220418_170256.log.json](https://driv
 
 Model | AP | AP@50 | AP@75 
 --- |:---:|:---:|:---:
-Faster R-CNN with FPN (baseline) | 30.9 | 53.9 | 32.2
+Faster R-CNN with FPN | 30.6 | 53.6 | 31.7
+Double-Head Faster R-CNN (baseline) | 30.9 | 53.9 | 32.2
 RRAM | 32.0 | 56.0 | 32.8 
 GRAM | 31.9 | 56.2 | 33.1 
 Cascade RRAM and GRAM | 32.4 | 56.6 | 33.5
