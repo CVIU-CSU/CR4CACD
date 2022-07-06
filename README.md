@@ -1,4 +1,4 @@
-## Contextual Relationships for Cervical Cell Detection
+## Contextual Relationships for Abnormal Cervical Cell Detection
 
 This is the code implementation of the RoI attention method. Our code is built on the basis of MMDetection.
 
@@ -24,7 +24,7 @@ We set up 5 config files to realize GRAM and RRAM including different combinatio
 Train log of Cascade RRAM and GRAM is in [20220418_170256.log.json](https://drive.google.com/file/d/1EK41ipU_l5cxRWC0AY0rzh1TtVJKqMed/view?usp=sharing). The trained model is available on google driver [here](https://drive.google.com/file/d/1EK41ipU_l5cxRWC0AY0rzh1TtVJKqMed/view?usp=sharing). The trained model with multi-scale training is available on google driver [here](https://drive.google.com/file/d/1u6wWtWsSnieZorDqPrYPTUYuZUWrMh2D/view?usp=sharing).
 
 
-Model | AP | AP@50 | mAP@75 
+Model | AP | AP@50 | AP@75 
 --- |:---:|:---:|:---:
 Faster R-CNN with FPN (baseline) | 30.9 | 53.9 | 32.2
 RRAM | 32.0 | 56.0 | 32.8 
