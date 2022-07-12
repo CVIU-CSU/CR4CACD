@@ -1,6 +1,6 @@
 ## Contextual Relationships for Abnormal Cervical Cell Detection
 
-This is the code implementation of [Exploring Contextual Relationships for Cervical Abnormal Cell Detection](https://arxiv.org/abs/2106.15113). 
+This is the code implementation of [Exploring Contextual Relationships for Cervical Abnormal Cell Detection](https://arxiv.org/abs/2207.04693). 
 Our code is built on the basis of MMDetection.
 
 MMDetection is an open source object detection toolbox based on PyTorch. It is
