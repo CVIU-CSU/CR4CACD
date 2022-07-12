@@ -10,7 +10,7 @@ The master branch works with **PyTorch 1.6** and [**MMDetection v2.6.0**](https:
 
 ## Datasets
 
-We collected a liquid-based cervical cytology images dataset, called Cervical Cell Detection (CCD) dataset. The CCD dataset consists of 40,000 pathological images, 30,000 training, 5000 validation and 5,000 testing. All annotated instances belong to 10 categories i.e., negative for intraepithelial lesion for malignancy (NILM), atypical squamous cells-undetermined significance (ASCUS), atypical squamous cells-cannot exclude HSIL (ASCH), low-grade squamous intraepithelial lesion (LSIL), high-grade squamous intraepithelial lesion (HSIL), atypical glandular cells (AGC), vaginalis trichomoniasis (VAG), monilia (MON), dysbacteriosis (DYS) and endocervical cells (EC), etc. Annotated NILM cells are used to assist model training, but are not involved in mAP computation.
+We collected a liquid-based cervical cytology images dataset, called Cervical Cell Detection (CCD) dataset. The CCD dataset consists of 40,000 pathological images, 30,000 training, 5,000 validation and 5,000 testing. All annotated instances belong to 10 categories i.e., negative for intraepithelial lesion for malignancy (NILM), atypical squamous cells-undetermined significance (ASCUS), atypical squamous cells-cannot exclude HSIL (ASCH), low-grade squamous intraepithelial lesion (LSIL), high-grade squamous intraepithelial lesion (HSIL), atypical glandular cells (AGC), vaginalis trichomoniasis (VAG), monilia (MON), dysbacteriosis (DYS) and endocervical cells (EC), etc. Annotated NILM cells are used to assist model training, but are not involved in mAP computation.
 
 ## Method
 
@@ -34,6 +34,12 @@ GRAM | 31.9 | 56.2 | 33.1
 Cascade RRAM and GRAM | 32.4 | 56.6 | 33.5
 Cascade RRAM and GRAM (multi-scale training) | 34.2 | 58.6 | 36.0 
 
-## Contact
-
-This repo is currently maintained by Shuo Feng ([@FengShuo96](https://github.com/FengShuo96)).
+## Citation
+```
+@article{liang2022exploring,
+  title={Exploring Contextual Relationships for Cervical Abnormal Cell Detection},
+  author={Yixiong Liang and Shuo Feng and Qing Liu and Hulin Kuang and Liyan Liao and Yun Du and Nanying Che amd Jianfeng Liu and Jianxin Wang},
+  journal={arXiv preprint arXiv:2207.04693},
+  year={2022}
+}
+```
