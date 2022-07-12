@@ -1,6 +1,7 @@
 ## Contextual Relationships for Abnormal Cervical Cell Detection
 
-This is the code implementation of the RoI attention method. Our code is built on the basis of MMDetection.
+This is the code implementation of [Exploring Contextual Relationships for Cervical Abnormal Cell Detection](https://arxiv.org/abs/2106.15113). 
+Our code is built on the basis of MMDetection.
 
 MMDetection is an open source object detection toolbox based on PyTorch. It is
 a part of the OpenMMLab project developed by [Multimedia Laboratory, CUHK](http://mmlab.ie.cuhk.edu.hk/).
