@@ -38,7 +38,7 @@ Cascade RRAM and GRAM (multi-scale training) | 34.2 | 58.6 | 36.0
 
 ### On ComparisonDetector dataset
 
-Train log files are in [work_dirs_comparison](/work_dirs_comparison)
+Train log files are in [work_dirs_comparison](/work_dirs_comparison).
 
 Model | AP | AP@50 | AP@75 
 --- |:---:|:---:|:---:
