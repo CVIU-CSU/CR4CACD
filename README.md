@@ -38,6 +38,8 @@ Cascade RRAM and GRAM (multi-scale training) | 34.2 | 58.6 | 36.0
 
 ### On ComparisonDetector dataset
 
+Train log files are in [work_dirs_comparison](/work_dirs_comparison)
+
 Model | AP | AP@50 | AP@75 
 --- |:---:|:---:|:---:
 Faster R-CNN with FPN | 20.3 | 46.0 | 15.5
