@@ -1,0 +1,1141 @@
+2023-02-03 10:57:34,244 - mmdet - INFO - Environment info:
+------------------------------------------------------------
+sys.platform: linux
+Python: 3.7.11 (default, Jul 27 2021, 14:32:16) [GCC 7.5.0]
+CUDA available: True
+GPU 0,1,2,3: GeForce RTX 2080 Ti
+CUDA_HOME: /usr/local/cuda
+NVCC: Cuda compilation tools, release 10.2, V10.2.89
+GCC: gcc (Ubuntu 5.4.0-6ubuntu1~16.04.11) 5.4.0 20160609
+PyTorch: 1.6.0
+PyTorch compiling details: PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) oneAPI Math Kernel Library Version 2021.4-Product Build 20210904 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v1.5.0 (Git Hash e2ac1fac44c5078ca927cb9b90e1b3066a0b2ed0)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 10.2
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_37,code=compute_37
+  - CuDNN 7.6.5
+  - Magma 2.5.2
+  - Build settings: BLAS=MKL, BUILD_TYPE=Release, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DUSE_VULKAN_WRAPPER -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, USE_CUDA=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_STATIC_DISPATCH=OFF, 
+
+TorchVision: 0.7.0
+OpenCV: 4.5.4
+MMCV: 1.3.17
+MMCV Compiler: GCC 5.4
+MMCV CUDA Compiler: 10.2
+MMDetection: 2.18.0+
+------------------------------------------------------------
+
+2023-02-03 10:57:34,500 - mmdet - INFO - Distributed training: True
+2023-02-03 10:57:34,830 - mmdet - INFO - Config:
+dataset_type = 'CocoDataset'
+data_root = '/root/commonfile/data/ComparisonDetectorDataset/'
+img_norm_cfg = dict(
+    mean=[102.9801, 115.9465, 122.7717], std=[1.0, 1.0, 1.0], to_rgb=False)
+train_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='LoadAnnotations', with_bbox=True),
+    dict(type='Resize', img_scale=(1333, 800), keep_ratio=True),
+    dict(type='RandomFlip', flip_ratio=0.5),
+    dict(
+        type='Normalize',
+        mean=[102.9801, 115.9465, 122.7717],
+        std=[1.0, 1.0, 1.0],
+        to_rgb=False),
+    dict(type='Pad', size_divisor=32),
+    dict(type='DefaultFormatBundle'),
+    dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
+]
+test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(
+        type='MultiScaleFlipAug',
+        img_scale=(1333, 800),
+        flip=False,
+        transforms=[
+            dict(type='Resize', keep_ratio=True),
+            dict(type='RandomFlip'),
+            dict(
+                type='Normalize',
+                mean=[102.9801, 115.9465, 122.7717],
+                std=[1.0, 1.0, 1.0],
+                to_rgb=False),
+            dict(type='Pad', size_divisor=32),
+            dict(type='ImageToTensor', keys=['img']),
+            dict(type='Collect', keys=['img'])
+        ])
+]
+data = dict(
+    samples_per_gpu=2,
+    workers_per_gpu=2,
+    train=dict(
+        type='CocoDataset',
+        ann_file='/root/commonfile/data/ComparisonDetectorDataset/train.json',
+        img_prefix='/root/commonfile/data/ComparisonDetectorDataset/train/',
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(type='LoadAnnotations', with_bbox=True),
+            dict(type='Resize', img_scale=(1333, 800), keep_ratio=True),
+            dict(type='RandomFlip', flip_ratio=0.5),
+            dict(
+                type='Normalize',
+                mean=[102.9801, 115.9465, 122.7717],
+                std=[1.0, 1.0, 1.0],
+                to_rgb=False),
+            dict(type='Pad', size_divisor=32),
+            dict(type='DefaultFormatBundle'),
+            dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
+        ]),
+    val=dict(
+        type='CocoDataset',
+        ann_file='/root/commonfile/data/ComparisonDetectorDataset/test.json',
+        img_prefix='/root/commonfile/data/ComparisonDetectorDataset/test/',
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(
+                type='MultiScaleFlipAug',
+                img_scale=(1333, 800),
+                flip=False,
+                transforms=[
+                    dict(type='Resize', keep_ratio=True),
+                    dict(type='RandomFlip'),
+                    dict(
+                        type='Normalize',
+                        mean=[102.9801, 115.9465, 122.7717],
+                        std=[1.0, 1.0, 1.0],
+                        to_rgb=False),
+                    dict(type='Pad', size_divisor=32),
+                    dict(type='ImageToTensor', keys=['img']),
+                    dict(type='Collect', keys=['img'])
+                ])
+        ]),
+    test=dict(
+        type='CocoDataset',
+        ann_file='/root/commonfile/data/ComparisonDetectorDataset/test.json',
+        img_prefix='/root/commonfile/data/ComparisonDetectorDataset/test/',
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(
+                type='MultiScaleFlipAug',
+                img_scale=(1333, 800),
+                flip=False,
+                transforms=[
+                    dict(type='Resize', keep_ratio=True),
+                    dict(type='RandomFlip'),
+                    dict(
+                        type='Normalize',
+                        mean=[102.9801, 115.9465, 122.7717],
+                        std=[1.0, 1.0, 1.0],
+                        to_rgb=False),
+                    dict(type='Pad', size_divisor=32),
+                    dict(type='ImageToTensor', keys=['img']),
+                    dict(type='Collect', keys=['img'])
+                ])
+        ]))
+evaluation = dict(interval=1, metric='bbox')
+optimizer = dict(
+    type='SGD',
+    lr=0.01,
+    momentum=0.9,
+    weight_decay=0.0001,
+    paramwise_cfg=dict(bias_lr_mult=2.0, bias_decay_mult=0.0))
+optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
+lr_config = dict(
+    policy='step',
+    warmup='constant',
+    warmup_iters=500,
+    warmup_ratio=0.3333333333333333,
+    step=[8, 11])
+runner = dict(type='EpochBasedRunner', max_epochs=12)
+checkpoint_config = dict(interval=2)
+log_config = dict(interval=50, hooks=[dict(type='TextLoggerHook')])
+custom_hooks = [dict(type='NumClassCheckHook')]
+dist_params = dict(backend='nccl')
+log_level = 'INFO'
+load_from = None
+resume_from = None
+workflow = [('train', 1)]
+model = dict(
+    type='FCOS',
+    backbone=dict(
+        type='ResNet',
+        depth=50,
+        num_stages=4,
+        out_indices=(0, 1, 2, 3),
+        frozen_stages=1,
+        norm_cfg=dict(type='BN', requires_grad=False),
+        norm_eval=True,
+        style='caffe',
+        init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet50')),
+    neck=dict(
+        type='FPN',
+        in_channels=[256, 512, 1024, 2048],
+        out_channels=256,
+        start_level=1,
+        add_extra_convs='on_output',
+        num_outs=5,
+        relu_before_extra_convs=True),
+    bbox_head=dict(
+        type='FCOSHead',
+        num_classes=80,
+        in_channels=256,
+        stacked_convs=4,
+        feat_channels=256,
+        strides=[8, 16, 32, 64, 128],
+        loss_cls=dict(
+            type='FocalLoss',
+            use_sigmoid=True,
+            gamma=2.0,
+            alpha=0.25,
+            loss_weight=1.0),
+        loss_bbox=dict(type='IoULoss', loss_weight=1.0),
+        loss_centerness=dict(
+            type='CrossEntropyLoss', use_sigmoid=True, loss_weight=1.0)),
+    train_cfg=dict(
+        assigner=dict(
+            type='MaxIoUAssigner',
+            pos_iou_thr=0.5,
+            neg_iou_thr=0.4,
+            min_pos_iou=0,
+            ignore_iof_thr=-1),
+        allowed_border=-1,
+        pos_weight=-1,
+        debug=False),
+    test_cfg=dict(
+        nms_pre=1000,
+        min_bbox_size=0,
+        score_thr=0.05,
+        nms=dict(type='nms', iou_threshold=0.5),
+        max_per_img=100))
+opencv_num_threads = 0
+mp_start_method = 'fork'
+auto_scale_lr = dict(enable=False, base_batch_size=16)
+work_dir = './work_dirs/fcos_r50_fpn_1x_coco_comparison'
+auto_resume = False
+gpu_ids = range(0, 4)
+
+2023-02-03 10:57:35,218 - mmdet - INFO - initialize ResNet with init_cfg {'type': 'Pretrained', 'checkpoint': 'torchvision://resnet50'}
+2023-02-03 10:57:38,982 - mmdet - INFO - initialize FPN with init_cfg {'type': 'Xavier', 'layer': 'Conv2d', 'distribution': 'uniform'}
+2023-02-03 10:57:39,014 - mmdet - INFO - initialize FCOSHead with init_cfg {'type': 'Normal', 'layer': 'Conv2d', 'std': 0.01, 'override': {'type': 'Normal', 'name': 'conv_cls', 'std': 0.01, 'bias_prob': 0.01}}
+Name of parameter - Initialization information
+
+backbone.conv1.weight - torch.Size([64, 3, 7, 7]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.bn1.weight - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.bn1.bias - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.0.conv1.weight - torch.Size([64, 64, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.0.bn1.weight - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.0.bn1.bias - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.0.conv2.weight - torch.Size([64, 64, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.0.bn2.weight - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.0.bn2.bias - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.0.conv3.weight - torch.Size([256, 64, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.0.bn3.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.0.bn3.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.0.downsample.0.weight - torch.Size([256, 64, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.0.downsample.1.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.0.downsample.1.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.1.conv1.weight - torch.Size([64, 256, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.1.bn1.weight - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.1.bn1.bias - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.1.conv2.weight - torch.Size([64, 64, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.1.bn2.weight - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.1.bn2.bias - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.1.conv3.weight - torch.Size([256, 64, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.1.bn3.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.1.bn3.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.2.conv1.weight - torch.Size([64, 256, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.2.bn1.weight - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.2.bn1.bias - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.2.conv2.weight - torch.Size([64, 64, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.2.bn2.weight - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.2.bn2.bias - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.2.conv3.weight - torch.Size([256, 64, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.2.bn3.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer1.2.bn3.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.0.conv1.weight - torch.Size([128, 256, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.0.bn1.weight - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.0.bn1.bias - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.0.conv2.weight - torch.Size([128, 128, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.0.bn2.weight - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.0.bn2.bias - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.0.conv3.weight - torch.Size([512, 128, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.0.bn3.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.0.bn3.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.0.downsample.0.weight - torch.Size([512, 256, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.0.downsample.1.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.0.downsample.1.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.1.conv1.weight - torch.Size([128, 512, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.1.bn1.weight - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.1.bn1.bias - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.1.conv2.weight - torch.Size([128, 128, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.1.bn2.weight - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.1.bn2.bias - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.1.conv3.weight - torch.Size([512, 128, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.1.bn3.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.1.bn3.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.2.conv1.weight - torch.Size([128, 512, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.2.bn1.weight - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.2.bn1.bias - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.2.conv2.weight - torch.Size([128, 128, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.2.bn2.weight - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.2.bn2.bias - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.2.conv3.weight - torch.Size([512, 128, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.2.bn3.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.2.bn3.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.3.conv1.weight - torch.Size([128, 512, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.3.bn1.weight - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.3.bn1.bias - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.3.conv2.weight - torch.Size([128, 128, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.3.bn2.weight - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.3.bn2.bias - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.3.conv3.weight - torch.Size([512, 128, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.3.bn3.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer2.3.bn3.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.0.conv1.weight - torch.Size([256, 512, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.0.bn1.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.0.bn1.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.0.conv2.weight - torch.Size([256, 256, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.0.bn2.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.0.bn2.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.0.conv3.weight - torch.Size([1024, 256, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.0.bn3.weight - torch.Size([1024]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.0.bn3.bias - torch.Size([1024]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.0.downsample.0.weight - torch.Size([1024, 512, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.0.downsample.1.weight - torch.Size([1024]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.0.downsample.1.bias - torch.Size([1024]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.1.conv1.weight - torch.Size([256, 1024, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.1.bn1.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.1.bn1.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.1.conv2.weight - torch.Size([256, 256, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.1.bn2.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.1.bn2.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.1.conv3.weight - torch.Size([1024, 256, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.1.bn3.weight - torch.Size([1024]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.1.bn3.bias - torch.Size([1024]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.2.conv1.weight - torch.Size([256, 1024, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.2.bn1.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.2.bn1.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.2.conv2.weight - torch.Size([256, 256, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.2.bn2.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.2.bn2.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.2.conv3.weight - torch.Size([1024, 256, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.2.bn3.weight - torch.Size([1024]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.2.bn3.bias - torch.Size([1024]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.3.conv1.weight - torch.Size([256, 1024, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.3.bn1.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.3.bn1.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.3.conv2.weight - torch.Size([256, 256, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.3.bn2.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.3.bn2.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.3.conv3.weight - torch.Size([1024, 256, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.3.bn3.weight - torch.Size([1024]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.3.bn3.bias - torch.Size([1024]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.4.conv1.weight - torch.Size([256, 1024, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.4.bn1.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.4.bn1.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.4.conv2.weight - torch.Size([256, 256, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.4.bn2.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.4.bn2.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.4.conv3.weight - torch.Size([1024, 256, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.4.bn3.weight - torch.Size([1024]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.4.bn3.bias - torch.Size([1024]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.5.conv1.weight - torch.Size([256, 1024, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.5.bn1.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.5.bn1.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.5.conv2.weight - torch.Size([256, 256, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.5.bn2.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.5.bn2.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.5.conv3.weight - torch.Size([1024, 256, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.5.bn3.weight - torch.Size([1024]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer3.5.bn3.bias - torch.Size([1024]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.0.conv1.weight - torch.Size([512, 1024, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.0.bn1.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.0.bn1.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.0.conv2.weight - torch.Size([512, 512, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.0.bn2.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.0.bn2.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.0.conv3.weight - torch.Size([2048, 512, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.0.bn3.weight - torch.Size([2048]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.0.bn3.bias - torch.Size([2048]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.0.downsample.0.weight - torch.Size([2048, 1024, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.0.downsample.1.weight - torch.Size([2048]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.0.downsample.1.bias - torch.Size([2048]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.1.conv1.weight - torch.Size([512, 2048, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.1.bn1.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.1.bn1.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.1.conv2.weight - torch.Size([512, 512, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.1.bn2.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.1.bn2.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.1.conv3.weight - torch.Size([2048, 512, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.1.bn3.weight - torch.Size([2048]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.1.bn3.bias - torch.Size([2048]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.2.conv1.weight - torch.Size([512, 2048, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.2.bn1.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.2.bn1.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.2.conv2.weight - torch.Size([512, 512, 3, 3]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.2.bn2.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.2.bn2.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.2.conv3.weight - torch.Size([2048, 512, 1, 1]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.2.bn3.weight - torch.Size([2048]): 
+PretrainedInit: load from torchvision://resnet50 
+
+backbone.layer4.2.bn3.bias - torch.Size([2048]): 
+PretrainedInit: load from torchvision://resnet50 
+
+neck.lateral_convs.0.conv.weight - torch.Size([256, 512, 1, 1]): 
+XavierInit: gain=1, distribution=uniform, bias=0 
+
+neck.lateral_convs.0.conv.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+neck.lateral_convs.1.conv.weight - torch.Size([256, 1024, 1, 1]): 
+XavierInit: gain=1, distribution=uniform, bias=0 
+
+neck.lateral_convs.1.conv.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+neck.lateral_convs.2.conv.weight - torch.Size([256, 2048, 1, 1]): 
+XavierInit: gain=1, distribution=uniform, bias=0 
+
+neck.lateral_convs.2.conv.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+neck.fpn_convs.0.conv.weight - torch.Size([256, 256, 3, 3]): 
+XavierInit: gain=1, distribution=uniform, bias=0 
+
+neck.fpn_convs.0.conv.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+neck.fpn_convs.1.conv.weight - torch.Size([256, 256, 3, 3]): 
+XavierInit: gain=1, distribution=uniform, bias=0 
+
+neck.fpn_convs.1.conv.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+neck.fpn_convs.2.conv.weight - torch.Size([256, 256, 3, 3]): 
+XavierInit: gain=1, distribution=uniform, bias=0 
+
+neck.fpn_convs.2.conv.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+neck.fpn_convs.3.conv.weight - torch.Size([256, 256, 3, 3]): 
+XavierInit: gain=1, distribution=uniform, bias=0 
+
+neck.fpn_convs.3.conv.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+neck.fpn_convs.4.conv.weight - torch.Size([256, 256, 3, 3]): 
+XavierInit: gain=1, distribution=uniform, bias=0 
+
+neck.fpn_convs.4.conv.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.cls_convs.0.conv.weight - torch.Size([256, 256, 3, 3]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+bbox_head.cls_convs.0.gn.weight - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.cls_convs.0.gn.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.cls_convs.1.conv.weight - torch.Size([256, 256, 3, 3]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+bbox_head.cls_convs.1.gn.weight - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.cls_convs.1.gn.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.cls_convs.2.conv.weight - torch.Size([256, 256, 3, 3]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+bbox_head.cls_convs.2.gn.weight - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.cls_convs.2.gn.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.cls_convs.3.conv.weight - torch.Size([256, 256, 3, 3]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+bbox_head.cls_convs.3.gn.weight - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.cls_convs.3.gn.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.reg_convs.0.conv.weight - torch.Size([256, 256, 3, 3]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+bbox_head.reg_convs.0.gn.weight - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.reg_convs.0.gn.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.reg_convs.1.conv.weight - torch.Size([256, 256, 3, 3]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+bbox_head.reg_convs.1.gn.weight - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.reg_convs.1.gn.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.reg_convs.2.conv.weight - torch.Size([256, 256, 3, 3]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+bbox_head.reg_convs.2.gn.weight - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.reg_convs.2.gn.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.reg_convs.3.conv.weight - torch.Size([256, 256, 3, 3]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+bbox_head.reg_convs.3.gn.weight - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.reg_convs.3.gn.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.conv_cls.weight - torch.Size([80, 256, 3, 3]): 
+NormalInit: mean=0, std=0.01, bias=-4.59511985013459 
+
+bbox_head.conv_cls.bias - torch.Size([80]): 
+NormalInit: mean=0, std=0.01, bias=-4.59511985013459 
+
+bbox_head.conv_reg.weight - torch.Size([4, 256, 3, 3]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+bbox_head.conv_reg.bias - torch.Size([4]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+bbox_head.conv_centerness.weight - torch.Size([1, 256, 3, 3]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+bbox_head.conv_centerness.bias - torch.Size([1]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+bbox_head.scales.0.scale - torch.Size([]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.scales.1.scale - torch.Size([]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.scales.2.scale - torch.Size([]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.scales.3.scale - torch.Size([]): 
+The value is the same before and after calling `init_weights` of FCOS  
+
+bbox_head.scales.4.scale - torch.Size([]): 
+The value is the same before and after calling `init_weights` of FCOS  
+2023-02-03 10:57:39,874 - mmdet - INFO - Start running, host: root@045187aa37f7, work_dir: /root/userfolder/mmdet-2.18/mmdetection/work_dirs/fcos_r50_fpn_1x_coco_comparison
+2023-02-03 10:57:39,875 - mmdet - INFO - Hooks will be executed in the following order:
+before_run:
+(VERY_HIGH   ) StepLrUpdaterHook                  
+(NORMAL      ) CheckpointHook                     
+(LOW         ) DistEvalHook                       
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+before_train_epoch:
+(VERY_HIGH   ) StepLrUpdaterHook                  
+(NORMAL      ) DistSamplerSeedHook                
+(NORMAL      ) NumClassCheckHook                  
+(LOW         ) IterTimerHook                      
+(LOW         ) DistEvalHook                       
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+before_train_iter:
+(VERY_HIGH   ) StepLrUpdaterHook                  
+(LOW         ) IterTimerHook                      
+(LOW         ) DistEvalHook                       
+ -------------------- 
+after_train_iter:
+(ABOVE_NORMAL) OptimizerHook                      
+(NORMAL      ) CheckpointHook                     
+(LOW         ) IterTimerHook                      
+(LOW         ) DistEvalHook                       
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+after_train_epoch:
+(NORMAL      ) CheckpointHook                     
+(LOW         ) DistEvalHook                       
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+before_val_epoch:
+(NORMAL      ) DistSamplerSeedHook                
+(NORMAL      ) NumClassCheckHook                  
+(LOW         ) IterTimerHook                      
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+before_val_iter:
+(LOW         ) IterTimerHook                      
+ -------------------- 
+after_val_iter:
+(LOW         ) IterTimerHook                      
+ -------------------- 
+after_val_epoch:
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+after_run:
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+2023-02-03 10:57:39,875 - mmdet - INFO - workflow: [('train', 1)], max: 12 epochs
+2023-02-03 10:57:39,875 - mmdet - INFO - Checkpoints will be saved to /root/userfolder/mmdet-2.18/mmdetection/work_dirs/fcos_r50_fpn_1x_coco_comparison by HardDiskBackend.
+2023-02-03 10:58:10,021 - mmdet - INFO - Epoch [1][50/834]	lr: 3.333e-03, eta: 1:40:02, time: 0.603, data_time: 0.274, memory: 3171, loss_cls: 0.9591, loss_bbox: 1.6774, loss_centerness: 0.6661, loss: 3.3026, grad_norm: 26.2768
+2023-02-03 10:58:26,327 - mmdet - INFO - Epoch [1][100/834]	lr: 3.333e-03, eta: 1:16:41, time: 0.326, data_time: 0.008, memory: 3171, loss_cls: 0.7261, loss_bbox: 0.8119, loss_centerness: 0.6558, loss: 2.1938, grad_norm: 7.2800
+2023-02-03 10:58:42,821 - mmdet - INFO - Epoch [1][150/834]	lr: 3.333e-03, eta: 1:08:56, time: 0.330, data_time: 0.008, memory: 3171, loss_cls: 0.8085, loss_bbox: 0.7732, loss_centerness: 0.6473, loss: 2.2290, grad_norm: 6.5456
+2023-02-03 10:58:59,277 - mmdet - INFO - Epoch [1][200/834]	lr: 3.333e-03, eta: 1:04:53, time: 0.329, data_time: 0.008, memory: 3171, loss_cls: 0.7949, loss_bbox: 0.7258, loss_centerness: 0.6408, loss: 2.1616, grad_norm: 8.2855
+2023-02-03 10:59:15,708 - mmdet - INFO - Epoch [1][250/834]	lr: 3.333e-03, eta: 1:02:20, time: 0.329, data_time: 0.008, memory: 3171, loss_cls: 0.6578, loss_bbox: 0.6752, loss_centerness: 0.6317, loss: 1.9647, grad_norm: 6.4901
+2023-02-03 10:59:32,073 - mmdet - INFO - Epoch [1][300/834]	lr: 3.333e-03, eta: 1:00:30, time: 0.327, data_time: 0.009, memory: 3171, loss_cls: 0.6198, loss_bbox: 0.6278, loss_centerness: 0.6365, loss: 1.8841, grad_norm: 5.5939
+2023-02-03 10:59:48,620 - mmdet - INFO - Epoch [1][350/834]	lr: 3.333e-03, eta: 0:59:12, time: 0.331, data_time: 0.009, memory: 3171, loss_cls: 0.6308, loss_bbox: 0.6664, loss_centerness: 0.6330, loss: 1.9302, grad_norm: 7.6387
+2023-02-03 11:00:05,138 - mmdet - INFO - Epoch [1][400/834]	lr: 3.333e-03, eta: 0:58:09, time: 0.330, data_time: 0.009, memory: 3171, loss_cls: 0.5554, loss_bbox: 0.6699, loss_centerness: 0.6266, loss: 1.8518, grad_norm: 6.3807
+2023-02-03 11:00:21,604 - mmdet - INFO - Epoch [1][450/834]	lr: 3.333e-03, eta: 0:57:14, time: 0.329, data_time: 0.009, memory: 3171, loss_cls: 0.5513, loss_bbox: 0.6230, loss_centerness: 0.6270, loss: 1.8013, grad_norm: 5.9653
+2023-02-03 11:00:38,203 - mmdet - INFO - Epoch [1][500/834]	lr: 3.333e-03, eta: 0:56:30, time: 0.332, data_time: 0.009, memory: 3171, loss_cls: 0.5292, loss_bbox: 0.5755, loss_centerness: 0.6229, loss: 1.7276, grad_norm: 5.6884
+2023-02-03 11:00:54,725 - mmdet - INFO - Epoch [1][550/834]	lr: 1.000e-02, eta: 0:55:50, time: 0.330, data_time: 0.008, memory: 3171, loss_cls: 0.5959, loss_bbox: 1.0054, loss_centerness: 0.6293, loss: 2.2305, grad_norm: 9.6309
+2023-02-03 11:01:11,274 - mmdet - INFO - Epoch [1][600/834]	lr: 1.000e-02, eta: 0:55:14, time: 0.331, data_time: 0.009, memory: 3171, loss_cls: 0.6447, loss_bbox: 0.6678, loss_centerness: 0.6261, loss: 1.9386, grad_norm: 6.1225
+2023-02-03 11:01:27,804 - mmdet - INFO - Epoch [1][650/834]	lr: 1.000e-02, eta: 0:54:41, time: 0.331, data_time: 0.008, memory: 3171, loss_cls: 0.6420, loss_bbox: 0.9623, loss_centerness: 0.6300, loss: 2.2343, grad_norm: 8.2150
+2023-02-03 11:01:44,406 - mmdet - INFO - Epoch [1][700/834]	lr: 1.000e-02, eta: 0:54:11, time: 0.332, data_time: 0.008, memory: 3171, loss_cls: 0.5802, loss_bbox: 0.6419, loss_centerness: 0.6270, loss: 1.8490, grad_norm: 5.7406
+2023-02-03 11:02:01,155 - mmdet - INFO - Epoch [1][750/834]	lr: 1.000e-02, eta: 0:53:45, time: 0.335, data_time: 0.009, memory: 3171, loss_cls: 0.5621, loss_bbox: 0.7347, loss_centerness: 0.6200, loss: 1.9168, grad_norm: 6.7071
+2023-02-03 11:02:17,779 - mmdet - INFO - Epoch [1][800/834]	lr: 1.000e-02, eta: 0:53:18, time: 0.332, data_time: 0.009, memory: 3171, loss_cls: 0.5347, loss_bbox: 0.8541, loss_centerness: 0.6174, loss: 2.0062, grad_norm: 6.8546
+2023-02-03 11:02:56,162 - mmdet - INFO - Evaluating bbox...
+2023-02-03 11:03:06,729 - mmdet - INFO - Exp name: fcos_r50_caffe_fpn_gn-head_1x_coco_comparison.py
+2023-02-03 11:03:06,729 - mmdet - INFO - Epoch(val) [1][186]	bbox_mAP: 0.0060, bbox_mAP_50: 0.0180, bbox_mAP_75: 0.0030, bbox_mAP_s: 0.0000, bbox_mAP_m: 0.0130, bbox_mAP_l: 0.0060, bbox_mAP_copypaste: 0.006 0.018 0.003 0.000 0.013 0.006
+2023-02-03 11:03:36,493 - mmdet - INFO - Epoch [2][50/834]	lr: 1.000e-02, eta: 0:52:55, time: 0.595, data_time: 0.271, memory: 3171, loss_cls: 0.5037, loss_bbox: 0.6081, loss_centerness: 0.6169, loss: 1.7287, grad_norm: 5.3809
+2023-02-03 11:03:53,109 - mmdet - INFO - Epoch [2][100/834]	lr: 1.000e-02, eta: 0:52:30, time: 0.332, data_time: 0.009, memory: 3171, loss_cls: 0.4917, loss_bbox: 0.5922, loss_centerness: 0.6164, loss: 1.7002, grad_norm: 5.0380
+2023-02-03 11:04:09,746 - mmdet - INFO - Epoch [2][150/834]	lr: 1.000e-02, eta: 0:52:06, time: 0.333, data_time: 0.008, memory: 3171, loss_cls: 0.5168, loss_bbox: 0.6124, loss_centerness: 0.6153, loss: 1.7445, grad_norm: 5.5810
+2023-02-03 11:04:26,228 - mmdet - INFO - Epoch [2][200/834]	lr: 1.000e-02, eta: 0:51:41, time: 0.330, data_time: 0.008, memory: 3171, loss_cls: 0.4865, loss_bbox: 0.6002, loss_centerness: 0.6156, loss: 1.7023, grad_norm: 5.0869
+2023-02-03 11:04:42,863 - mmdet - INFO - Epoch [2][250/834]	lr: 1.000e-02, eta: 0:51:19, time: 0.333, data_time: 0.008, memory: 3171, loss_cls: 0.5035, loss_bbox: 0.5953, loss_centerness: 0.6131, loss: 1.7119, grad_norm: 5.7681
+2023-02-03 11:04:59,513 - mmdet - INFO - Epoch [2][300/834]	lr: 1.000e-02, eta: 0:50:57, time: 0.333, data_time: 0.009, memory: 3171, loss_cls: 0.4876, loss_bbox: 0.5649, loss_centerness: 0.6139, loss: 1.6665, grad_norm: 4.9940
+2023-02-03 11:05:16,254 - mmdet - INFO - Epoch [2][350/834]	lr: 1.000e-02, eta: 0:50:36, time: 0.335, data_time: 0.009, memory: 3178, loss_cls: 0.4693, loss_bbox: 0.6313, loss_centerness: 0.6131, loss: 1.7137, grad_norm: 5.9801
+2023-02-03 11:05:32,968 - mmdet - INFO - Epoch [2][400/834]	lr: 1.000e-02, eta: 0:50:15, time: 0.334, data_time: 0.009, memory: 3178, loss_cls: 0.4560, loss_bbox: 0.6963, loss_centerness: 0.6123, loss: 1.7646, grad_norm: 6.2280
+2023-02-03 11:05:49,708 - mmdet - INFO - Epoch [2][450/834]	lr: 1.000e-02, eta: 0:49:55, time: 0.335, data_time: 0.009, memory: 3178, loss_cls: 0.4670, loss_bbox: 0.5544, loss_centerness: 0.6095, loss: 1.6308, grad_norm: 5.1318
+2023-02-03 11:06:06,346 - mmdet - INFO - Epoch [2][500/834]	lr: 1.000e-02, eta: 0:49:34, time: 0.333, data_time: 0.009, memory: 3178, loss_cls: 0.4482, loss_bbox: 0.6047, loss_centerness: 0.6097, loss: 1.6626, grad_norm: 5.3986
+2023-02-03 11:06:23,137 - mmdet - INFO - Epoch [2][550/834]	lr: 1.000e-02, eta: 0:49:15, time: 0.336, data_time: 0.009, memory: 3178, loss_cls: 0.4751, loss_bbox: 0.5358, loss_centerness: 0.6091, loss: 1.6199, grad_norm: 4.5601
+2023-02-03 11:06:39,789 - mmdet - INFO - Epoch [2][600/834]	lr: 1.000e-02, eta: 0:48:55, time: 0.333, data_time: 0.009, memory: 3178, loss_cls: 0.4451, loss_bbox: 0.5816, loss_centerness: 0.6088, loss: 1.6355, grad_norm: 4.9455
+2023-02-03 11:06:56,398 - mmdet - INFO - Epoch [2][650/834]	lr: 1.000e-02, eta: 0:48:35, time: 0.332, data_time: 0.008, memory: 3178, loss_cls: 0.4591, loss_bbox: 0.5178, loss_centerness: 0.6078, loss: 1.5847, grad_norm: 4.6401
+2023-02-03 11:07:13,019 - mmdet - INFO - Epoch [2][700/834]	lr: 1.000e-02, eta: 0:48:15, time: 0.332, data_time: 0.008, memory: 3178, loss_cls: 0.4758, loss_bbox: 0.5715, loss_centerness: 0.6089, loss: 1.6563, grad_norm: 5.1497
+2023-02-03 11:07:29,762 - mmdet - INFO - Epoch [2][750/834]	lr: 1.000e-02, eta: 0:47:56, time: 0.335, data_time: 0.009, memory: 3178, loss_cls: 0.4319, loss_bbox: 0.5134, loss_centerness: 0.6092, loss: 1.5546, grad_norm: 4.5455
+2023-02-03 11:07:46,574 - mmdet - INFO - Epoch [2][800/834]	lr: 1.000e-02, eta: 0:47:38, time: 0.336, data_time: 0.009, memory: 3178, loss_cls: 0.4669, loss_bbox: 0.5191, loss_centerness: 0.6079, loss: 1.5939, grad_norm: 5.1560
+2023-02-03 11:07:58,823 - mmdet - INFO - Saving checkpoint at 2 epochs
+2023-02-03 11:08:25,756 - mmdet - INFO - Evaluating bbox...
+2023-02-03 11:08:37,259 - mmdet - INFO - Exp name: fcos_r50_caffe_fpn_gn-head_1x_coco_comparison.py
+2023-02-03 11:08:37,259 - mmdet - INFO - Epoch(val) [2][186]	bbox_mAP: 0.0100, bbox_mAP_50: 0.0380, bbox_mAP_75: 0.0020, bbox_mAP_s: 0.0000, bbox_mAP_m: 0.0120, bbox_mAP_l: 0.0080, bbox_mAP_copypaste: 0.010 0.038 0.002 0.000 0.012 0.008
+2023-02-03 11:09:07,091 - mmdet - INFO - Epoch [3][50/834]	lr: 1.000e-02, eta: 0:47:15, time: 0.596, data_time: 0.272, memory: 3178, loss_cls: 0.4387, loss_bbox: 0.5033, loss_centerness: 0.6022, loss: 1.5441, grad_norm: 4.6292
+2023-02-03 11:09:23,690 - mmdet - INFO - Epoch [3][100/834]	lr: 1.000e-02, eta: 0:46:55, time: 0.332, data_time: 0.008, memory: 3178, loss_cls: 0.4327, loss_bbox: 0.4835, loss_centerness: 0.6049, loss: 1.5211, grad_norm: 4.1446
+2023-02-03 11:09:40,208 - mmdet - INFO - Epoch [3][150/834]	lr: 1.000e-02, eta: 0:46:36, time: 0.330, data_time: 0.009, memory: 3178, loss_cls: 0.4200, loss_bbox: 0.5184, loss_centerness: 0.6067, loss: 1.5451, grad_norm: 5.3095
+2023-02-03 11:09:56,906 - mmdet - INFO - Epoch [3][200/834]	lr: 1.000e-02, eta: 0:46:17, time: 0.334, data_time: 0.008, memory: 3178, loss_cls: 0.4235, loss_bbox: 0.4768, loss_centerness: 0.6056, loss: 1.5059, grad_norm: 4.2056
+2023-02-03 11:10:13,626 - mmdet - INFO - Epoch [3][250/834]	lr: 1.000e-02, eta: 0:45:58, time: 0.334, data_time: 0.009, memory: 3178, loss_cls: 0.4184, loss_bbox: 0.4480, loss_centerness: 0.6057, loss: 1.4721, grad_norm: 3.7112
+2023-02-03 11:10:30,356 - mmdet - INFO - Epoch [3][300/834]	lr: 1.000e-02, eta: 0:45:40, time: 0.335, data_time: 0.009, memory: 3178, loss_cls: 0.4185, loss_bbox: 0.5001, loss_centerness: 0.6050, loss: 1.5236, grad_norm: 4.8633
+2023-02-03 11:10:47,243 - mmdet - INFO - Epoch [3][350/834]	lr: 1.000e-02, eta: 0:45:22, time: 0.338, data_time: 0.008, memory: 3178, loss_cls: 0.4183, loss_bbox: 0.4822, loss_centerness: 0.6048, loss: 1.5053, grad_norm: 4.4805
+2023-02-03 11:11:04,015 - mmdet - INFO - Epoch [3][400/834]	lr: 1.000e-02, eta: 0:45:04, time: 0.335, data_time: 0.008, memory: 3178, loss_cls: 0.4125, loss_bbox: 0.4750, loss_centerness: 0.6019, loss: 1.4894, grad_norm: 4.3582
+2023-02-03 11:11:20,679 - mmdet - INFO - Epoch [3][450/834]	lr: 1.000e-02, eta: 0:44:46, time: 0.333, data_time: 0.008, memory: 3178, loss_cls: 0.4350, loss_bbox: 0.4857, loss_centerness: 0.6057, loss: 1.5264, grad_norm: 4.6531
+2023-02-03 11:11:37,443 - mmdet - INFO - Epoch [3][500/834]	lr: 1.000e-02, eta: 0:44:28, time: 0.335, data_time: 0.009, memory: 3178, loss_cls: 0.4109, loss_bbox: 0.4833, loss_centerness: 0.6028, loss: 1.4971, grad_norm: 4.3396
+2023-02-03 11:11:54,135 - mmdet - INFO - Epoch [3][550/834]	lr: 1.000e-02, eta: 0:44:10, time: 0.334, data_time: 0.008, memory: 3178, loss_cls: 0.4141, loss_bbox: 0.4686, loss_centerness: 0.6028, loss: 1.4854, grad_norm: 4.3761
+2023-02-03 11:12:11,092 - mmdet - INFO - Epoch [3][600/834]	lr: 1.000e-02, eta: 0:43:53, time: 0.339, data_time: 0.008, memory: 3178, loss_cls: 0.3991, loss_bbox: 0.4699, loss_centerness: 0.6018, loss: 1.4708, grad_norm: 3.7808
+2023-02-03 11:12:27,952 - mmdet - INFO - Epoch [3][650/834]	lr: 1.000e-02, eta: 0:43:35, time: 0.337, data_time: 0.009, memory: 3178, loss_cls: 0.4128, loss_bbox: 0.4697, loss_centerness: 0.6025, loss: 1.4850, grad_norm: 4.6412
+2023-02-03 11:12:44,930 - mmdet - INFO - Epoch [3][700/834]	lr: 1.000e-02, eta: 0:43:18, time: 0.340, data_time: 0.008, memory: 3178, loss_cls: 0.3958, loss_bbox: 0.4298, loss_centerness: 0.6013, loss: 1.4268, grad_norm: 3.5438
+2023-02-03 11:13:01,813 - mmdet - INFO - Epoch [3][750/834]	lr: 1.000e-02, eta: 0:43:01, time: 0.338, data_time: 0.008, memory: 3178, loss_cls: 0.3975, loss_bbox: 0.5338, loss_centerness: 0.6007, loss: 1.5320, grad_norm: 5.1201
+2023-02-03 11:13:18,722 - mmdet - INFO - Epoch [3][800/834]	lr: 1.000e-02, eta: 0:42:43, time: 0.338, data_time: 0.009, memory: 3178, loss_cls: 0.3892, loss_bbox: 0.4351, loss_centerness: 0.6017, loss: 1.4259, grad_norm: 3.9915
+2023-02-03 11:13:57,031 - mmdet - INFO - Evaluating bbox...
+2023-02-03 11:14:08,863 - mmdet - INFO - Exp name: fcos_r50_caffe_fpn_gn-head_1x_coco_comparison.py
+2023-02-03 11:14:08,864 - mmdet - INFO - Epoch(val) [3][186]	bbox_mAP: 0.0360, bbox_mAP_50: 0.1000, bbox_mAP_75: 0.0130, bbox_mAP_s: 0.0010, bbox_mAP_m: 0.0300, bbox_mAP_l: 0.0360, bbox_mAP_copypaste: 0.036 0.100 0.013 0.001 0.030 0.036
+2023-02-03 11:14:38,380 - mmdet - INFO - Epoch [4][50/834]	lr: 1.000e-02, eta: 0:42:17, time: 0.590, data_time: 0.270, memory: 3178, loss_cls: 0.3979, loss_bbox: 0.4618, loss_centerness: 0.6012, loss: 1.4608, grad_norm: 4.4040
+2023-02-03 11:14:54,811 - mmdet - INFO - Epoch [4][100/834]	lr: 1.000e-02, eta: 0:41:59, time: 0.329, data_time: 0.007, memory: 3178, loss_cls: 0.3756, loss_bbox: 0.4273, loss_centerness: 0.6004, loss: 1.4033, grad_norm: 3.5060
+2023-02-03 11:15:11,280 - mmdet - INFO - Epoch [4][150/834]	lr: 1.000e-02, eta: 0:41:40, time: 0.329, data_time: 0.007, memory: 3178, loss_cls: 0.3960, loss_bbox: 0.4268, loss_centerness: 0.6012, loss: 1.4240, grad_norm: 3.7676
+2023-02-03 11:15:27,735 - mmdet - INFO - Epoch [4][200/834]	lr: 1.000e-02, eta: 0:41:22, time: 0.329, data_time: 0.007, memory: 3178, loss_cls: 0.4248, loss_bbox: 0.5468, loss_centerness: 0.6016, loss: 1.5732, grad_norm: 5.0263
+2023-02-03 11:15:44,272 - mmdet - INFO - Epoch [4][250/834]	lr: 1.000e-02, eta: 0:41:04, time: 0.331, data_time: 0.008, memory: 3178, loss_cls: 0.3945, loss_bbox: 0.4955, loss_centerness: 0.6014, loss: 1.4914, grad_norm: 4.4263
+2023-02-03 11:16:00,830 - mmdet - INFO - Epoch [4][300/834]	lr: 1.000e-02, eta: 0:40:46, time: 0.331, data_time: 0.007, memory: 3178, loss_cls: 0.4065, loss_bbox: 0.4364, loss_centerness: 0.6035, loss: 1.4464, grad_norm: 3.5282
+2023-02-03 11:16:17,398 - mmdet - INFO - Epoch [4][350/834]	lr: 1.000e-02, eta: 0:40:28, time: 0.331, data_time: 0.008, memory: 3178, loss_cls: 0.3724, loss_bbox: 0.4159, loss_centerness: 0.5978, loss: 1.3861, grad_norm: 3.7564
+2023-02-03 11:16:34,174 - mmdet - INFO - Epoch [4][400/834]	lr: 1.000e-02, eta: 0:40:10, time: 0.335, data_time: 0.007, memory: 3178, loss_cls: 0.3801, loss_bbox: 0.4370, loss_centerness: 0.6011, loss: 1.4183, grad_norm: 3.7896
+2023-02-03 11:16:50,978 - mmdet - INFO - Epoch [4][450/834]	lr: 1.000e-02, eta: 0:39:53, time: 0.336, data_time: 0.007, memory: 3178, loss_cls: 0.3875, loss_bbox: 0.4217, loss_centerness: 0.5983, loss: 1.4076, grad_norm: 3.3646
+2023-02-03 11:17:07,639 - mmdet - INFO - Epoch [4][500/834]	lr: 1.000e-02, eta: 0:39:35, time: 0.333, data_time: 0.008, memory: 3178, loss_cls: 0.3832, loss_bbox: 0.4188, loss_centerness: 0.5985, loss: 1.4005, grad_norm: 3.6727
+2023-02-03 11:17:24,294 - mmdet - INFO - Epoch [4][550/834]	lr: 1.000e-02, eta: 0:39:17, time: 0.333, data_time: 0.008, memory: 3178, loss_cls: 0.3802, loss_bbox: 0.4086, loss_centerness: 0.5989, loss: 1.3877, grad_norm: 3.5468
+2023-02-03 11:17:40,967 - mmdet - INFO - Epoch [4][600/834]	lr: 1.000e-02, eta: 0:39:00, time: 0.333, data_time: 0.007, memory: 3178, loss_cls: 0.3665, loss_bbox: 0.4149, loss_centerness: 0.6000, loss: 1.3814, grad_norm: 3.4896
+2023-02-03 11:17:57,707 - mmdet - INFO - Epoch [4][650/834]	lr: 1.000e-02, eta: 0:38:43, time: 0.335, data_time: 0.007, memory: 3178, loss_cls: 0.3644, loss_bbox: 0.4781, loss_centerness: 0.5970, loss: 1.4395, grad_norm: 4.4270
+2023-02-03 11:18:14,461 - mmdet - INFO - Epoch [4][700/834]	lr: 1.000e-02, eta: 0:38:25, time: 0.335, data_time: 0.007, memory: 3178, loss_cls: 0.3781, loss_bbox: 0.4298, loss_centerness: 0.5987, loss: 1.4066, grad_norm: 3.6188
+2023-02-03 11:18:31,145 - mmdet - INFO - Epoch [4][750/834]	lr: 1.000e-02, eta: 0:38:08, time: 0.334, data_time: 0.008, memory: 3178, loss_cls: 0.3613, loss_bbox: 0.4066, loss_centerness: 0.5980, loss: 1.3658, grad_norm: 3.3933
+2023-02-03 11:18:47,907 - mmdet - INFO - Epoch [4][800/834]	lr: 1.000e-02, eta: 0:37:50, time: 0.335, data_time: 0.008, memory: 3178, loss_cls: 0.3821, loss_bbox: 0.4477, loss_centerness: 0.5994, loss: 1.4291, grad_norm: 3.9488
+2023-02-03 11:18:59,813 - mmdet - INFO - Saving checkpoint at 4 epochs
+2023-02-03 11:19:26,266 - mmdet - INFO - Evaluating bbox...
+2023-02-03 11:19:37,620 - mmdet - INFO - Exp name: fcos_r50_caffe_fpn_gn-head_1x_coco_comparison.py
+2023-02-03 11:19:37,621 - mmdet - INFO - Epoch(val) [4][186]	bbox_mAP: 0.0640, bbox_mAP_50: 0.1520, bbox_mAP_75: 0.0410, bbox_mAP_s: 0.0010, bbox_mAP_m: 0.0510, bbox_mAP_l: 0.0680, bbox_mAP_copypaste: 0.064 0.152 0.041 0.001 0.051 0.068
+2023-02-03 11:20:06,783 - mmdet - INFO - Epoch [5][50/834]	lr: 1.000e-02, eta: 0:37:23, time: 0.583, data_time: 0.264, memory: 3178, loss_cls: 0.3528, loss_bbox: 0.4263, loss_centerness: 0.5967, loss: 1.3758, grad_norm: 3.9861
+2023-02-03 11:20:23,250 - mmdet - INFO - Epoch [5][100/834]	lr: 1.000e-02, eta: 0:37:06, time: 0.329, data_time: 0.008, memory: 3178, loss_cls: 0.3724, loss_bbox: 0.4067, loss_centerness: 0.5970, loss: 1.3761, grad_norm: 3.7562
+2023-02-03 11:20:39,682 - mmdet - INFO - Epoch [5][150/834]	lr: 1.000e-02, eta: 0:36:48, time: 0.329, data_time: 0.008, memory: 3178, loss_cls: 0.3646, loss_bbox: 0.4426, loss_centerness: 0.5989, loss: 1.4062, grad_norm: 3.9287
+2023-02-03 11:20:56,304 - mmdet - INFO - Epoch [5][200/834]	lr: 1.000e-02, eta: 0:36:30, time: 0.332, data_time: 0.009, memory: 3178, loss_cls: 0.3785, loss_bbox: 0.4357, loss_centerness: 0.5968, loss: 1.4111, grad_norm: 3.8689
+2023-02-03 11:21:12,919 - mmdet - INFO - Epoch [5][250/834]	lr: 1.000e-02, eta: 0:36:13, time: 0.332, data_time: 0.008, memory: 3178, loss_cls: 0.3595, loss_bbox: 0.3869, loss_centerness: 0.5977, loss: 1.3441, grad_norm: 2.9779
+2023-02-03 11:21:29,695 - mmdet - INFO - Epoch [5][300/834]	lr: 1.000e-02, eta: 0:35:56, time: 0.336, data_time: 0.008, memory: 3178, loss_cls: 0.3522, loss_bbox: 0.3968, loss_centerness: 0.5954, loss: 1.3443, grad_norm: 3.3145
+2023-02-03 11:21:46,551 - mmdet - INFO - Epoch [5][350/834]	lr: 1.000e-02, eta: 0:35:38, time: 0.337, data_time: 0.009, memory: 3178, loss_cls: 0.3607, loss_bbox: 0.3953, loss_centerness: 0.5980, loss: 1.3540, grad_norm: 3.0852
+2023-02-03 11:22:03,301 - mmdet - INFO - Epoch [5][400/834]	lr: 1.000e-02, eta: 0:35:21, time: 0.335, data_time: 0.010, memory: 3178, loss_cls: 0.3521, loss_bbox: 0.4099, loss_centerness: 0.5970, loss: 1.3590, grad_norm: 3.3775
+2023-02-03 11:22:20,118 - mmdet - INFO - Epoch [5][450/834]	lr: 1.000e-02, eta: 0:35:04, time: 0.336, data_time: 0.009, memory: 3178, loss_cls: 0.3573, loss_bbox: 0.4065, loss_centerness: 0.5977, loss: 1.3615, grad_norm: 3.2038
+2023-02-03 11:22:36,968 - mmdet - INFO - Epoch [5][500/834]	lr: 1.000e-02, eta: 0:34:47, time: 0.337, data_time: 0.009, memory: 3178, loss_cls: 0.3558, loss_bbox: 0.4117, loss_centerness: 0.5970, loss: 1.3646, grad_norm: 3.4957
+2023-02-03 11:22:53,805 - mmdet - INFO - Epoch [5][550/834]	lr: 1.000e-02, eta: 0:34:30, time: 0.337, data_time: 0.009, memory: 3180, loss_cls: 0.3473, loss_bbox: 0.3815, loss_centerness: 0.5953, loss: 1.3242, grad_norm: 3.1057
+2023-02-03 11:23:10,687 - mmdet - INFO - Epoch [5][600/834]	lr: 1.000e-02, eta: 0:34:13, time: 0.338, data_time: 0.009, memory: 3180, loss_cls: 0.3647, loss_bbox: 0.3940, loss_centerness: 0.5987, loss: 1.3573, grad_norm: 3.1454
+2023-02-03 11:23:27,506 - mmdet - INFO - Epoch [5][650/834]	lr: 1.000e-02, eta: 0:33:56, time: 0.336, data_time: 0.009, memory: 3180, loss_cls: 0.3524, loss_bbox: 0.3978, loss_centerness: 0.5961, loss: 1.3463, grad_norm: 3.3714
+2023-02-03 11:23:44,392 - mmdet - INFO - Epoch [5][700/834]	lr: 1.000e-02, eta: 0:33:39, time: 0.338, data_time: 0.009, memory: 3180, loss_cls: 0.3643, loss_bbox: 0.4281, loss_centerness: 0.5971, loss: 1.3895, grad_norm: 3.7948
+2023-02-03 11:24:01,164 - mmdet - INFO - Epoch [5][750/834]	lr: 1.000e-02, eta: 0:33:22, time: 0.335, data_time: 0.009, memory: 3180, loss_cls: 0.3440, loss_bbox: 0.4028, loss_centerness: 0.5979, loss: 1.3447, grad_norm: 3.2821
+2023-02-03 11:24:18,001 - mmdet - INFO - Epoch [5][800/834]	lr: 1.000e-02, eta: 0:33:05, time: 0.337, data_time: 0.009, memory: 3180, loss_cls: 0.3633, loss_bbox: 0.3777, loss_centerness: 0.5951, loss: 1.3361, grad_norm: 3.0338
+2023-02-03 11:24:56,660 - mmdet - INFO - Evaluating bbox...
+2023-02-03 11:25:07,415 - mmdet - INFO - Exp name: fcos_r50_caffe_fpn_gn-head_1x_coco_comparison.py
+2023-02-03 11:25:07,415 - mmdet - INFO - Epoch(val) [5][186]	bbox_mAP: 0.0720, bbox_mAP_50: 0.1840, bbox_mAP_75: 0.0410, bbox_mAP_s: 0.0040, bbox_mAP_m: 0.0550, bbox_mAP_l: 0.0720, bbox_mAP_copypaste: 0.072 0.184 0.041 0.004 0.055 0.072
+2023-02-03 11:25:36,775 - mmdet - INFO - Epoch [6][50/834]	lr: 1.000e-02, eta: 0:32:38, time: 0.587, data_time: 0.263, memory: 3180, loss_cls: 0.3613, loss_bbox: 0.3980, loss_centerness: 0.5975, loss: 1.3568, grad_norm: 3.3133
+2023-02-03 11:25:53,246 - mmdet - INFO - Epoch [6][100/834]	lr: 1.000e-02, eta: 0:32:20, time: 0.329, data_time: 0.008, memory: 3180, loss_cls: 0.3447, loss_bbox: 0.3889, loss_centerness: 0.5952, loss: 1.3288, grad_norm: 3.1539
+2023-02-03 11:26:09,872 - mmdet - INFO - Epoch [6][150/834]	lr: 1.000e-02, eta: 0:32:03, time: 0.333, data_time: 0.008, memory: 3180, loss_cls: 0.3495, loss_bbox: 0.3788, loss_centerness: 0.5954, loss: 1.3237, grad_norm: 3.1786
+2023-02-03 11:26:26,482 - mmdet - INFO - Epoch [6][200/834]	lr: 1.000e-02, eta: 0:31:46, time: 0.332, data_time: 0.008, memory: 3180, loss_cls: 0.3420, loss_bbox: 0.3661, loss_centerness: 0.5961, loss: 1.3042, grad_norm: 2.7608
+2023-02-03 11:26:43,267 - mmdet - INFO - Epoch [6][250/834]	lr: 1.000e-02, eta: 0:31:29, time: 0.336, data_time: 0.008, memory: 3180, loss_cls: 0.3335, loss_bbox: 0.3553, loss_centerness: 0.5949, loss: 1.2837, grad_norm: 2.7269
+2023-02-03 11:27:00,036 - mmdet - INFO - Epoch [6][300/834]	lr: 1.000e-02, eta: 0:31:12, time: 0.335, data_time: 0.008, memory: 3180, loss_cls: 0.3467, loss_bbox: 0.3636, loss_centerness: 0.5949, loss: 1.3052, grad_norm: 2.7056
+2023-02-03 11:27:16,874 - mmdet - INFO - Epoch [6][350/834]	lr: 1.000e-02, eta: 0:30:55, time: 0.337, data_time: 0.008, memory: 3180, loss_cls: 0.3356, loss_bbox: 0.3615, loss_centerness: 0.5937, loss: 1.2908, grad_norm: 2.7504
+2023-02-03 11:27:33,856 - mmdet - INFO - Epoch [6][400/834]	lr: 1.000e-02, eta: 0:30:38, time: 0.340, data_time: 0.008, memory: 3180, loss_cls: 0.3365, loss_bbox: 0.3745, loss_centerness: 0.5958, loss: 1.3068, grad_norm: 3.1205
+2023-02-03 11:27:50,745 - mmdet - INFO - Epoch [6][450/834]	lr: 1.000e-02, eta: 0:30:21, time: 0.338, data_time: 0.008, memory: 3180, loss_cls: 0.3470, loss_bbox: 0.3652, loss_centerness: 0.5954, loss: 1.3076, grad_norm: 2.9181
+2023-02-03 11:28:07,649 - mmdet - INFO - Epoch [6][500/834]	lr: 1.000e-02, eta: 0:30:04, time: 0.338, data_time: 0.009, memory: 3180, loss_cls: 0.3603, loss_bbox: 0.4142, loss_centerness: 0.5967, loss: 1.3712, grad_norm: 3.5862
+2023-02-03 11:28:24,536 - mmdet - INFO - Epoch [6][550/834]	lr: 1.000e-02, eta: 0:29:47, time: 0.338, data_time: 0.009, memory: 3180, loss_cls: 0.3422, loss_bbox: 0.3959, loss_centerness: 0.5967, loss: 1.3348, grad_norm: 3.1535
+2023-02-03 11:28:41,450 - mmdet - INFO - Epoch [6][600/834]	lr: 1.000e-02, eta: 0:29:30, time: 0.338, data_time: 0.008, memory: 3180, loss_cls: 0.3401, loss_bbox: 0.3675, loss_centerness: 0.5956, loss: 1.3031, grad_norm: 2.7658
+2023-02-03 11:28:58,385 - mmdet - INFO - Epoch [6][650/834]	lr: 1.000e-02, eta: 0:29:13, time: 0.339, data_time: 0.009, memory: 3180, loss_cls: 0.3490, loss_bbox: 0.3780, loss_centerness: 0.5948, loss: 1.3218, grad_norm: 2.7386
+2023-02-03 11:29:15,288 - mmdet - INFO - Epoch [6][700/834]	lr: 1.000e-02, eta: 0:28:57, time: 0.338, data_time: 0.008, memory: 3180, loss_cls: 0.3344, loss_bbox: 0.3658, loss_centerness: 0.5938, loss: 1.2940, grad_norm: 2.5422
+2023-02-03 11:29:32,168 - mmdet - INFO - Epoch [6][750/834]	lr: 1.000e-02, eta: 0:28:40, time: 0.338, data_time: 0.008, memory: 3180, loss_cls: 0.3353, loss_bbox: 0.3818, loss_centerness: 0.5957, loss: 1.3128, grad_norm: 2.8859
+2023-02-03 11:29:49,093 - mmdet - INFO - Epoch [6][800/834]	lr: 1.000e-02, eta: 0:28:23, time: 0.338, data_time: 0.009, memory: 3180, loss_cls: 0.3341, loss_bbox: 0.3913, loss_centerness: 0.5960, loss: 1.3215, grad_norm: 2.8925
+2023-02-03 11:30:01,216 - mmdet - INFO - Saving checkpoint at 6 epochs
+2023-02-03 11:30:28,057 - mmdet - INFO - Evaluating bbox...
+2023-02-03 11:30:40,320 - mmdet - INFO - Exp name: fcos_r50_caffe_fpn_gn-head_1x_coco_comparison.py
+2023-02-03 11:30:40,320 - mmdet - INFO - Epoch(val) [6][186]	bbox_mAP: 0.1170, bbox_mAP_50: 0.2610, bbox_mAP_75: 0.0890, bbox_mAP_s: 0.0050, bbox_mAP_m: 0.0580, bbox_mAP_l: 0.1280, bbox_mAP_copypaste: 0.117 0.261 0.089 0.005 0.058 0.128
+2023-02-03 11:31:09,706 - mmdet - INFO - Epoch [7][50/834]	lr: 1.000e-02, eta: 0:27:55, time: 0.588, data_time: 0.266, memory: 3180, loss_cls: 0.3478, loss_bbox: 0.3527, loss_centerness: 0.5940, loss: 1.2946, grad_norm: 2.6893
+2023-02-03 11:31:26,233 - mmdet - INFO - Epoch [7][100/834]	lr: 1.000e-02, eta: 0:27:38, time: 0.331, data_time: 0.008, memory: 3180, loss_cls: 0.3306, loss_bbox: 0.3598, loss_centerness: 0.5947, loss: 1.2851, grad_norm: 2.7217
+2023-02-03 11:31:42,736 - mmdet - INFO - Epoch [7][150/834]	lr: 1.000e-02, eta: 0:27:21, time: 0.330, data_time: 0.008, memory: 3180, loss_cls: 0.3175, loss_bbox: 0.3573, loss_centerness: 0.5957, loss: 1.2705, grad_norm: 2.5116
+2023-02-03 11:31:59,203 - mmdet - INFO - Epoch [7][200/834]	lr: 1.000e-02, eta: 0:27:03, time: 0.329, data_time: 0.008, memory: 3180, loss_cls: 0.3232, loss_bbox: 0.3770, loss_centerness: 0.5971, loss: 1.2973, grad_norm: 2.8346
+2023-02-03 11:32:15,792 - mmdet - INFO - Epoch [7][250/834]	lr: 1.000e-02, eta: 0:26:46, time: 0.332, data_time: 0.008, memory: 3180, loss_cls: 0.3315, loss_bbox: 0.3570, loss_centerness: 0.5955, loss: 1.2840, grad_norm: 2.5509
+2023-02-03 11:32:32,534 - mmdet - INFO - Epoch [7][300/834]	lr: 1.000e-02, eta: 0:26:29, time: 0.335, data_time: 0.009, memory: 3180, loss_cls: 0.3226, loss_bbox: 0.3661, loss_centerness: 0.5942, loss: 1.2829, grad_norm: 2.8450
+2023-02-03 11:32:49,177 - mmdet - INFO - Epoch [7][350/834]	lr: 1.000e-02, eta: 0:26:12, time: 0.333, data_time: 0.008, memory: 3180, loss_cls: 0.3366, loss_bbox: 0.3660, loss_centerness: 0.5944, loss: 1.2969, grad_norm: 2.6653
+2023-02-03 11:33:05,891 - mmdet - INFO - Epoch [7][400/834]	lr: 1.000e-02, eta: 0:25:55, time: 0.334, data_time: 0.009, memory: 3180, loss_cls: 0.3316, loss_bbox: 0.3509, loss_centerness: 0.5929, loss: 1.2754, grad_norm: 2.5990
+2023-02-03 11:33:22,560 - mmdet - INFO - Epoch [7][450/834]	lr: 1.000e-02, eta: 0:25:38, time: 0.333, data_time: 0.009, memory: 3180, loss_cls: 0.3264, loss_bbox: 0.3815, loss_centerness: 0.5952, loss: 1.3031, grad_norm: 2.9657
+2023-02-03 11:33:39,385 - mmdet - INFO - Epoch [7][500/834]	lr: 1.000e-02, eta: 0:25:21, time: 0.337, data_time: 0.008, memory: 3180, loss_cls: 0.3261, loss_bbox: 0.3622, loss_centerness: 0.5948, loss: 1.2832, grad_norm: 2.4879
+2023-02-03 11:33:56,254 - mmdet - INFO - Epoch [7][550/834]	lr: 1.000e-02, eta: 0:25:04, time: 0.337, data_time: 0.009, memory: 3180, loss_cls: 0.3428, loss_bbox: 0.3640, loss_centerness: 0.5961, loss: 1.3029, grad_norm: 2.5556
+2023-02-03 11:34:13,027 - mmdet - INFO - Epoch [7][600/834]	lr: 1.000e-02, eta: 0:24:47, time: 0.335, data_time: 0.009, memory: 3180, loss_cls: 0.3219, loss_bbox: 0.3705, loss_centerness: 0.5952, loss: 1.2876, grad_norm: 2.6739
+2023-02-03 11:34:29,833 - mmdet - INFO - Epoch [7][650/834]	lr: 1.000e-02, eta: 0:24:30, time: 0.336, data_time: 0.008, memory: 3180, loss_cls: 0.3244, loss_bbox: 0.3710, loss_centerness: 0.5945, loss: 1.2899, grad_norm: 2.6284
+2023-02-03 11:34:46,708 - mmdet - INFO - Epoch [7][700/834]	lr: 1.000e-02, eta: 0:24:13, time: 0.337, data_time: 0.009, memory: 3180, loss_cls: 0.3220, loss_bbox: 0.3537, loss_centerness: 0.5910, loss: 1.2668, grad_norm: 2.5569
+2023-02-03 11:35:03,501 - mmdet - INFO - Epoch [7][750/834]	lr: 1.000e-02, eta: 0:23:56, time: 0.336, data_time: 0.009, memory: 3180, loss_cls: 0.3207, loss_bbox: 0.3527, loss_centerness: 0.5940, loss: 1.2673, grad_norm: 2.2983
+2023-02-03 11:35:20,402 - mmdet - INFO - Epoch [7][800/834]	lr: 1.000e-02, eta: 0:23:39, time: 0.338, data_time: 0.009, memory: 3180, loss_cls: 0.3269, loss_bbox: 0.3865, loss_centerness: 0.5941, loss: 1.3075, grad_norm: 2.8892
+2023-02-03 11:35:58,792 - mmdet - INFO - Evaluating bbox...
+2023-02-03 11:36:11,103 - mmdet - INFO - Exp name: fcos_r50_caffe_fpn_gn-head_1x_coco_comparison.py
+2023-02-03 11:36:11,104 - mmdet - INFO - Epoch(val) [7][186]	bbox_mAP: 0.1450, bbox_mAP_50: 0.3200, bbox_mAP_75: 0.1100, bbox_mAP_s: 0.0060, bbox_mAP_m: 0.0710, bbox_mAP_l: 0.1480, bbox_mAP_copypaste: 0.145 0.320 0.110 0.006 0.071 0.148
+2023-02-03 11:36:40,670 - mmdet - INFO - Epoch [8][50/834]	lr: 1.000e-02, eta: 0:23:12, time: 0.591, data_time: 0.269, memory: 3180, loss_cls: 0.3293, loss_bbox: 0.3542, loss_centerness: 0.5937, loss: 1.2772, grad_norm: 2.5961
+2023-02-03 11:36:57,166 - mmdet - INFO - Epoch [8][100/834]	lr: 1.000e-02, eta: 0:22:55, time: 0.330, data_time: 0.008, memory: 3180, loss_cls: 0.3160, loss_bbox: 0.3471, loss_centerness: 0.5933, loss: 1.2564, grad_norm: 2.4768
+2023-02-03 11:37:13,769 - mmdet - INFO - Epoch [8][150/834]	lr: 1.000e-02, eta: 0:22:38, time: 0.332, data_time: 0.009, memory: 3180, loss_cls: 0.3228, loss_bbox: 0.3461, loss_centerness: 0.5929, loss: 1.2618, grad_norm: 2.3835
+2023-02-03 11:37:30,448 - mmdet - INFO - Epoch [8][200/834]	lr: 1.000e-02, eta: 0:22:21, time: 0.334, data_time: 0.008, memory: 3188, loss_cls: 0.3114, loss_bbox: 0.3491, loss_centerness: 0.5931, loss: 1.2536, grad_norm: 2.3760
+2023-02-03 11:37:47,011 - mmdet - INFO - Epoch [8][250/834]	lr: 1.000e-02, eta: 0:22:03, time: 0.331, data_time: 0.008, memory: 3188, loss_cls: 0.3195, loss_bbox: 0.3439, loss_centerness: 0.5931, loss: 1.2565, grad_norm: 2.2192
+2023-02-03 11:38:03,617 - mmdet - INFO - Epoch [8][300/834]	lr: 1.000e-02, eta: 0:21:46, time: 0.332, data_time: 0.008, memory: 3188, loss_cls: 0.3104, loss_bbox: 0.3334, loss_centerness: 0.5917, loss: 1.2355, grad_norm: 2.1824
+2023-02-03 11:38:20,253 - mmdet - INFO - Epoch [8][350/834]	lr: 1.000e-02, eta: 0:21:29, time: 0.333, data_time: 0.008, memory: 3188, loss_cls: 0.3146, loss_bbox: 0.3383, loss_centerness: 0.5942, loss: 1.2471, grad_norm: 2.1746
+2023-02-03 11:38:36,922 - mmdet - INFO - Epoch [8][400/834]	lr: 1.000e-02, eta: 0:21:12, time: 0.333, data_time: 0.008, memory: 3188, loss_cls: 0.3141, loss_bbox: 0.3642, loss_centerness: 0.5931, loss: 1.2714, grad_norm: 2.6733
+2023-02-03 11:38:53,576 - mmdet - INFO - Epoch [8][450/834]	lr: 1.000e-02, eta: 0:20:55, time: 0.333, data_time: 0.008, memory: 3188, loss_cls: 0.3096, loss_bbox: 0.3472, loss_centerness: 0.5938, loss: 1.2507, grad_norm: 2.2878
+2023-02-03 11:39:10,274 - mmdet - INFO - Epoch [8][500/834]	lr: 1.000e-02, eta: 0:20:38, time: 0.334, data_time: 0.009, memory: 3188, loss_cls: 0.3177, loss_bbox: 0.3493, loss_centerness: 0.5930, loss: 1.2600, grad_norm: 2.3586
+2023-02-03 11:39:27,044 - mmdet - INFO - Epoch [8][550/834]	lr: 1.000e-02, eta: 0:20:21, time: 0.335, data_time: 0.009, memory: 3188, loss_cls: 0.2995, loss_bbox: 0.3572, loss_centerness: 0.5943, loss: 1.2510, grad_norm: 2.3050
+2023-02-03 11:39:43,858 - mmdet - INFO - Epoch [8][600/834]	lr: 1.000e-02, eta: 0:20:04, time: 0.336, data_time: 0.009, memory: 3188, loss_cls: 0.3060, loss_bbox: 0.3422, loss_centerness: 0.5935, loss: 1.2417, grad_norm: 2.2917
+2023-02-03 11:40:00,608 - mmdet - INFO - Epoch [8][650/834]	lr: 1.000e-02, eta: 0:19:48, time: 0.335, data_time: 0.009, memory: 3188, loss_cls: 0.3095, loss_bbox: 0.3524, loss_centerness: 0.5940, loss: 1.2559, grad_norm: 2.2755
+2023-02-03 11:40:17,407 - mmdet - INFO - Epoch [8][700/834]	lr: 1.000e-02, eta: 0:19:31, time: 0.336, data_time: 0.008, memory: 3188, loss_cls: 0.3110, loss_bbox: 0.3674, loss_centerness: 0.5931, loss: 1.2714, grad_norm: 2.5018
+2023-02-03 11:40:34,283 - mmdet - INFO - Epoch [8][750/834]	lr: 1.000e-02, eta: 0:19:14, time: 0.338, data_time: 0.009, memory: 3188, loss_cls: 0.3184, loss_bbox: 0.3501, loss_centerness: 0.5933, loss: 1.2617, grad_norm: 2.4380
+2023-02-03 11:40:51,080 - mmdet - INFO - Epoch [8][800/834]	lr: 1.000e-02, eta: 0:18:57, time: 0.336, data_time: 0.009, memory: 3188, loss_cls: 0.3067, loss_bbox: 0.3467, loss_centerness: 0.5941, loss: 1.2475, grad_norm: 2.1581
+2023-02-03 11:41:03,224 - mmdet - INFO - Saving checkpoint at 8 epochs
+2023-02-03 11:41:30,151 - mmdet - INFO - Evaluating bbox...
+2023-02-03 11:41:42,458 - mmdet - INFO - Exp name: fcos_r50_caffe_fpn_gn-head_1x_coco_comparison.py
+2023-02-03 11:41:42,458 - mmdet - INFO - Epoch(val) [8][186]	bbox_mAP: 0.1520, bbox_mAP_50: 0.3410, bbox_mAP_75: 0.1020, bbox_mAP_s: 0.0040, bbox_mAP_m: 0.0840, bbox_mAP_l: 0.1570, bbox_mAP_copypaste: 0.152 0.341 0.102 0.004 0.084 0.157
+2023-02-03 11:42:11,854 - mmdet - INFO - Epoch [9][50/834]	lr: 1.000e-03, eta: 0:18:29, time: 0.588, data_time: 0.267, memory: 3188, loss_cls: 0.2855, loss_bbox: 0.3166, loss_centerness: 0.5906, loss: 1.1926, grad_norm: 1.7135
+2023-02-03 11:42:28,392 - mmdet - INFO - Epoch [9][100/834]	lr: 1.000e-03, eta: 0:18:12, time: 0.331, data_time: 0.008, memory: 3188, loss_cls: 0.2845, loss_bbox: 0.3096, loss_centerness: 0.5885, loss: 1.1825, grad_norm: 1.6778
+2023-02-03 11:42:44,942 - mmdet - INFO - Epoch [9][150/834]	lr: 1.000e-03, eta: 0:17:55, time: 0.331, data_time: 0.009, memory: 3188, loss_cls: 0.2829, loss_bbox: 0.3110, loss_centerness: 0.5899, loss: 1.1838, grad_norm: 1.6870
+2023-02-03 11:43:01,458 - mmdet - INFO - Epoch [9][200/834]	lr: 1.000e-03, eta: 0:17:38, time: 0.330, data_time: 0.008, memory: 3188, loss_cls: 0.2794, loss_bbox: 0.3111, loss_centerness: 0.5907, loss: 1.1811, grad_norm: 1.6575
+2023-02-03 11:43:18,102 - mmdet - INFO - Epoch [9][250/834]	lr: 1.000e-03, eta: 0:17:21, time: 0.333, data_time: 0.008, memory: 3188, loss_cls: 0.2713, loss_bbox: 0.3040, loss_centerness: 0.5902, loss: 1.1655, grad_norm: 1.6951
+2023-02-03 11:43:34,716 - mmdet - INFO - Epoch [9][300/834]	lr: 1.000e-03, eta: 0:17:04, time: 0.332, data_time: 0.008, memory: 3188, loss_cls: 0.2702, loss_bbox: 0.3127, loss_centerness: 0.5887, loss: 1.1716, grad_norm: 1.7934
+2023-02-03 11:43:51,330 - mmdet - INFO - Epoch [9][350/834]	lr: 1.000e-03, eta: 0:16:47, time: 0.332, data_time: 0.008, memory: 3188, loss_cls: 0.2723, loss_bbox: 0.3094, loss_centerness: 0.5898, loss: 1.1715, grad_norm: 1.7067
+2023-02-03 11:44:07,949 - mmdet - INFO - Epoch [9][400/834]	lr: 1.000e-03, eta: 0:16:30, time: 0.332, data_time: 0.008, memory: 3188, loss_cls: 0.2768, loss_bbox: 0.3086, loss_centerness: 0.5890, loss: 1.1744, grad_norm: 1.7414
+2023-02-03 11:44:24,552 - mmdet - INFO - Epoch [9][450/834]	lr: 1.000e-03, eta: 0:16:13, time: 0.332, data_time: 0.008, memory: 3188, loss_cls: 0.2759, loss_bbox: 0.3097, loss_centerness: 0.5899, loss: 1.1755, grad_norm: 1.8058
+2023-02-03 11:44:41,167 - mmdet - INFO - Epoch [9][500/834]	lr: 1.000e-03, eta: 0:15:56, time: 0.332, data_time: 0.008, memory: 3188, loss_cls: 0.2815, loss_bbox: 0.3149, loss_centerness: 0.5901, loss: 1.1864, grad_norm: 1.8257
+2023-02-03 11:44:57,824 - mmdet - INFO - Epoch [9][550/834]	lr: 1.000e-03, eta: 0:15:39, time: 0.333, data_time: 0.008, memory: 3188, loss_cls: 0.2702, loss_bbox: 0.3138, loss_centerness: 0.5914, loss: 1.1754, grad_norm: 1.7670
+2023-02-03 11:45:14,466 - mmdet - INFO - Epoch [9][600/834]	lr: 1.000e-03, eta: 0:15:22, time: 0.333, data_time: 0.008, memory: 3188, loss_cls: 0.2672, loss_bbox: 0.3009, loss_centerness: 0.5889, loss: 1.1571, grad_norm: 1.7898
+2023-02-03 11:45:31,133 - mmdet - INFO - Epoch [9][650/834]	lr: 1.000e-03, eta: 0:15:05, time: 0.333, data_time: 0.008, memory: 3188, loss_cls: 0.2704, loss_bbox: 0.3028, loss_centerness: 0.5894, loss: 1.1626, grad_norm: 1.7802
+2023-02-03 11:45:47,822 - mmdet - INFO - Epoch [9][700/834]	lr: 1.000e-03, eta: 0:14:48, time: 0.334, data_time: 0.008, memory: 3188, loss_cls: 0.2727, loss_bbox: 0.3083, loss_centerness: 0.5891, loss: 1.1701, grad_norm: 1.8658
+2023-02-03 11:46:04,577 - mmdet - INFO - Epoch [9][750/834]	lr: 1.000e-03, eta: 0:14:31, time: 0.335, data_time: 0.008, memory: 3188, loss_cls: 0.2771, loss_bbox: 0.3077, loss_centerness: 0.5881, loss: 1.1728, grad_norm: 1.9430
+2023-02-03 11:46:21,279 - mmdet - INFO - Epoch [9][800/834]	lr: 1.000e-03, eta: 0:14:14, time: 0.334, data_time: 0.008, memory: 3188, loss_cls: 0.2762, loss_bbox: 0.3030, loss_centerness: 0.5897, loss: 1.1689, grad_norm: 1.8609
+2023-02-03 11:46:59,572 - mmdet - INFO - Evaluating bbox...
+2023-02-03 11:47:11,881 - mmdet - INFO - Exp name: fcos_r50_caffe_fpn_gn-head_1x_coco_comparison.py
+2023-02-03 11:47:11,882 - mmdet - INFO - Epoch(val) [9][186]	bbox_mAP: 0.2150, bbox_mAP_50: 0.4300, bbox_mAP_75: 0.1790, bbox_mAP_s: 0.0080, bbox_mAP_m: 0.1180, bbox_mAP_l: 0.2270, bbox_mAP_copypaste: 0.215 0.430 0.179 0.008 0.118 0.227
+2023-02-03 11:47:41,568 - mmdet - INFO - Epoch [10][50/834]	lr: 1.000e-03, eta: 0:13:47, time: 0.594, data_time: 0.271, memory: 3188, loss_cls: 0.2627, loss_bbox: 0.2997, loss_centerness: 0.5887, loss: 1.1511, grad_norm: 1.7867
+2023-02-03 11:47:58,039 - mmdet - INFO - Epoch [10][100/834]	lr: 1.000e-03, eta: 0:13:30, time: 0.329, data_time: 0.008, memory: 3188, loss_cls: 0.2737, loss_bbox: 0.3047, loss_centerness: 0.5895, loss: 1.1679, grad_norm: 1.9340
+2023-02-03 11:48:14,521 - mmdet - INFO - Epoch [10][150/834]	lr: 1.000e-03, eta: 0:13:13, time: 0.330, data_time: 0.008, memory: 3188, loss_cls: 0.2646, loss_bbox: 0.2987, loss_centerness: 0.5870, loss: 1.1504, grad_norm: 1.7993
+2023-02-03 11:48:31,020 - mmdet - INFO - Epoch [10][200/834]	lr: 1.000e-03, eta: 0:12:56, time: 0.330, data_time: 0.008, memory: 3188, loss_cls: 0.2682, loss_bbox: 0.3054, loss_centerness: 0.5892, loss: 1.1628, grad_norm: 1.8840
+2023-02-03 11:48:47,651 - mmdet - INFO - Epoch [10][250/834]	lr: 1.000e-03, eta: 0:12:39, time: 0.333, data_time: 0.008, memory: 3188, loss_cls: 0.2673, loss_bbox: 0.3096, loss_centerness: 0.5907, loss: 1.1676, grad_norm: 1.6979
+2023-02-03 11:49:04,256 - mmdet - INFO - Epoch [10][300/834]	lr: 1.000e-03, eta: 0:12:22, time: 0.332, data_time: 0.008, memory: 3188, loss_cls: 0.2688, loss_bbox: 0.3099, loss_centerness: 0.5899, loss: 1.1686, grad_norm: 1.8396
+2023-02-03 11:49:20,890 - mmdet - INFO - Epoch [10][350/834]	lr: 1.000e-03, eta: 0:12:05, time: 0.333, data_time: 0.008, memory: 3188, loss_cls: 0.2693, loss_bbox: 0.3022, loss_centerness: 0.5875, loss: 1.1590, grad_norm: 1.9318
+2023-02-03 11:49:37,591 - mmdet - INFO - Epoch [10][400/834]	lr: 1.000e-03, eta: 0:11:48, time: 0.334, data_time: 0.008, memory: 3188, loss_cls: 0.2676, loss_bbox: 0.3024, loss_centerness: 0.5883, loss: 1.1583, grad_norm: 1.8588
+2023-02-03 11:49:54,261 - mmdet - INFO - Epoch [10][450/834]	lr: 1.000e-03, eta: 0:11:31, time: 0.333, data_time: 0.008, memory: 3188, loss_cls: 0.2701, loss_bbox: 0.3043, loss_centerness: 0.5900, loss: 1.1645, grad_norm: 2.0016
+2023-02-03 11:50:11,005 - mmdet - INFO - Epoch [10][500/834]	lr: 1.000e-03, eta: 0:11:14, time: 0.335, data_time: 0.008, memory: 3188, loss_cls: 0.2618, loss_bbox: 0.2991, loss_centerness: 0.5882, loss: 1.1491, grad_norm: 1.9038
+2023-02-03 11:50:27,753 - mmdet - INFO - Epoch [10][550/834]	lr: 1.000e-03, eta: 0:10:57, time: 0.335, data_time: 0.008, memory: 3188, loss_cls: 0.2720, loss_bbox: 0.3034, loss_centerness: 0.5888, loss: 1.1642, grad_norm: 2.0829
+2023-02-03 11:50:44,413 - mmdet - INFO - Epoch [10][600/834]	lr: 1.000e-03, eta: 0:10:40, time: 0.333, data_time: 0.008, memory: 3188, loss_cls: 0.2727, loss_bbox: 0.3017, loss_centerness: 0.5896, loss: 1.1639, grad_norm: 2.0418
+2023-02-03 11:51:01,245 - mmdet - INFO - Epoch [10][650/834]	lr: 1.000e-03, eta: 0:10:24, time: 0.337, data_time: 0.008, memory: 3188, loss_cls: 0.2659, loss_bbox: 0.3006, loss_centerness: 0.5883, loss: 1.1548, grad_norm: 1.8201
+2023-02-03 11:51:18,007 - mmdet - INFO - Epoch [10][700/834]	lr: 1.000e-03, eta: 0:10:07, time: 0.335, data_time: 0.008, memory: 3188, loss_cls: 0.2657, loss_bbox: 0.3112, loss_centerness: 0.5902, loss: 1.1670, grad_norm: 1.8347
+2023-02-03 11:51:34,695 - mmdet - INFO - Epoch [10][750/834]	lr: 1.000e-03, eta: 0:09:50, time: 0.334, data_time: 0.008, memory: 3188, loss_cls: 0.2702, loss_bbox: 0.3013, loss_centerness: 0.5883, loss: 1.1598, grad_norm: 1.9439
+2023-02-03 11:51:51,507 - mmdet - INFO - Epoch [10][800/834]	lr: 1.000e-03, eta: 0:09:33, time: 0.336, data_time: 0.008, memory: 3188, loss_cls: 0.2697, loss_bbox: 0.2996, loss_centerness: 0.5881, loss: 1.1575, grad_norm: 1.9109
+2023-02-03 11:52:03,475 - mmdet - INFO - Saving checkpoint at 10 epochs
+2023-02-03 11:52:30,076 - mmdet - INFO - Evaluating bbox...
+2023-02-03 11:52:42,213 - mmdet - INFO - Exp name: fcos_r50_caffe_fpn_gn-head_1x_coco_comparison.py
+2023-02-03 11:52:42,213 - mmdet - INFO - Epoch(val) [10][186]	bbox_mAP: 0.2220, bbox_mAP_50: 0.4370, bbox_mAP_75: 0.1980, bbox_mAP_s: 0.0080, bbox_mAP_m: 0.1220, bbox_mAP_l: 0.2310, bbox_mAP_copypaste: 0.222 0.437 0.198 0.008 0.122 0.231
+2023-02-03 11:53:11,804 - mmdet - INFO - Epoch [11][50/834]	lr: 1.000e-03, eta: 0:09:05, time: 0.592, data_time: 0.271, memory: 3188, loss_cls: 0.2577, loss_bbox: 0.2998, loss_centerness: 0.5876, loss: 1.1451, grad_norm: 1.8605
+2023-02-03 11:53:28,208 - mmdet - INFO - Epoch [11][100/834]	lr: 1.000e-03, eta: 0:08:48, time: 0.328, data_time: 0.008, memory: 3188, loss_cls: 0.2677, loss_bbox: 0.3021, loss_centerness: 0.5884, loss: 1.1582, grad_norm: 2.0155
+2023-02-03 11:53:44,705 - mmdet - INFO - Epoch [11][150/834]	lr: 1.000e-03, eta: 0:08:31, time: 0.330, data_time: 0.009, memory: 3188, loss_cls: 0.2671, loss_bbox: 0.3010, loss_centerness: 0.5889, loss: 1.1571, grad_norm: 1.8748
+2023-02-03 11:54:01,292 - mmdet - INFO - Epoch [11][200/834]	lr: 1.000e-03, eta: 0:08:14, time: 0.332, data_time: 0.008, memory: 3188, loss_cls: 0.2616, loss_bbox: 0.3030, loss_centerness: 0.5885, loss: 1.1531, grad_norm: 2.0179
+2023-02-03 11:54:17,965 - mmdet - INFO - Epoch [11][250/834]	lr: 1.000e-03, eta: 0:07:57, time: 0.333, data_time: 0.008, memory: 3188, loss_cls: 0.2658, loss_bbox: 0.2995, loss_centerness: 0.5879, loss: 1.1531, grad_norm: 1.9823
+2023-02-03 11:54:34,657 - mmdet - INFO - Epoch [11][300/834]	lr: 1.000e-03, eta: 0:07:40, time: 0.334, data_time: 0.009, memory: 3188, loss_cls: 0.2656, loss_bbox: 0.2978, loss_centerness: 0.5886, loss: 1.1520, grad_norm: 2.0180
+2023-02-03 11:54:51,412 - mmdet - INFO - Epoch [11][350/834]	lr: 1.000e-03, eta: 0:07:24, time: 0.335, data_time: 0.008, memory: 3188, loss_cls: 0.2727, loss_bbox: 0.3072, loss_centerness: 0.5893, loss: 1.1691, grad_norm: 2.0826
+2023-02-03 11:55:08,190 - mmdet - INFO - Epoch [11][400/834]	lr: 1.000e-03, eta: 0:07:07, time: 0.336, data_time: 0.009, memory: 3188, loss_cls: 0.2668, loss_bbox: 0.2957, loss_centerness: 0.5874, loss: 1.1499, grad_norm: 2.0969
+2023-02-03 11:55:25,020 - mmdet - INFO - Epoch [11][450/834]	lr: 1.000e-03, eta: 0:06:50, time: 0.337, data_time: 0.008, memory: 3188, loss_cls: 0.2637, loss_bbox: 0.2968, loss_centerness: 0.5882, loss: 1.1487, grad_norm: 2.0684
+2023-02-03 11:55:41,792 - mmdet - INFO - Epoch [11][500/834]	lr: 1.000e-03, eta: 0:06:33, time: 0.335, data_time: 0.008, memory: 3188, loss_cls: 0.2675, loss_bbox: 0.2990, loss_centerness: 0.5883, loss: 1.1549, grad_norm: 2.1132
+2023-02-03 11:55:58,679 - mmdet - INFO - Epoch [11][550/834]	lr: 1.000e-03, eta: 0:06:16, time: 0.338, data_time: 0.008, memory: 3188, loss_cls: 0.2612, loss_bbox: 0.3055, loss_centerness: 0.5901, loss: 1.1568, grad_norm: 1.9467
+2023-02-03 11:56:15,514 - mmdet - INFO - Epoch [11][600/834]	lr: 1.000e-03, eta: 0:05:59, time: 0.337, data_time: 0.008, memory: 3188, loss_cls: 0.2680, loss_bbox: 0.3063, loss_centerness: 0.5899, loss: 1.1642, grad_norm: 2.0646
+2023-02-03 11:56:32,330 - mmdet - INFO - Epoch [11][650/834]	lr: 1.000e-03, eta: 0:05:42, time: 0.336, data_time: 0.008, memory: 3188, loss_cls: 0.2652, loss_bbox: 0.2994, loss_centerness: 0.5886, loss: 1.1532, grad_norm: 1.9856
+2023-02-03 11:56:49,126 - mmdet - INFO - Epoch [11][700/834]	lr: 1.000e-03, eta: 0:05:26, time: 0.336, data_time: 0.008, memory: 3188, loss_cls: 0.2705, loss_bbox: 0.3049, loss_centerness: 0.5910, loss: 1.1664, grad_norm: 2.0496
+2023-02-03 11:57:05,914 - mmdet - INFO - Epoch [11][750/834]	lr: 1.000e-03, eta: 0:05:09, time: 0.336, data_time: 0.008, memory: 3188, loss_cls: 0.2565, loss_bbox: 0.2948, loss_centerness: 0.5872, loss: 1.1385, grad_norm: 2.0457
+2023-02-03 11:57:22,879 - mmdet - INFO - Epoch [11][800/834]	lr: 1.000e-03, eta: 0:04:52, time: 0.339, data_time: 0.009, memory: 3188, loss_cls: 0.2672, loss_bbox: 0.3038, loss_centerness: 0.5867, loss: 1.1578, grad_norm: 2.2138
+2023-02-03 11:58:01,030 - mmdet - INFO - Evaluating bbox...
+2023-02-03 11:58:13,267 - mmdet - INFO - Exp name: fcos_r50_caffe_fpn_gn-head_1x_coco_comparison.py
+2023-02-03 11:58:13,267 - mmdet - INFO - Epoch(val) [11][186]	bbox_mAP: 0.2160, bbox_mAP_50: 0.4460, bbox_mAP_75: 0.1870, bbox_mAP_s: 0.0080, bbox_mAP_m: 0.1220, bbox_mAP_l: 0.2260, bbox_mAP_copypaste: 0.216 0.446 0.187 0.008 0.122 0.226
+2023-02-03 11:58:42,741 - mmdet - INFO - Epoch [12][50/834]	lr: 1.000e-04, eta: 0:04:24, time: 0.589, data_time: 0.267, memory: 3188, loss_cls: 0.2583, loss_bbox: 0.2975, loss_centerness: 0.5868, loss: 1.1425, grad_norm: 1.9117
+2023-02-03 11:58:59,201 - mmdet - INFO - Epoch [12][100/834]	lr: 1.000e-04, eta: 0:04:07, time: 0.329, data_time: 0.009, memory: 3188, loss_cls: 0.2633, loss_bbox: 0.3012, loss_centerness: 0.5887, loss: 1.1532, grad_norm: 1.8811
+2023-02-03 11:59:15,731 - mmdet - INFO - Epoch [12][150/834]	lr: 1.000e-04, eta: 0:03:50, time: 0.331, data_time: 0.009, memory: 3188, loss_cls: 0.2596, loss_bbox: 0.2973, loss_centerness: 0.5888, loss: 1.1456, grad_norm: 1.8883
+2023-02-03 11:59:32,409 - mmdet - INFO - Epoch [12][200/834]	lr: 1.000e-04, eta: 0:03:33, time: 0.334, data_time: 0.009, memory: 3188, loss_cls: 0.2521, loss_bbox: 0.2902, loss_centerness: 0.5871, loss: 1.1295, grad_norm: 1.9144
+2023-02-03 11:59:49,072 - mmdet - INFO - Epoch [12][250/834]	lr: 1.000e-04, eta: 0:03:16, time: 0.333, data_time: 0.009, memory: 3188, loss_cls: 0.2562, loss_bbox: 0.2949, loss_centerness: 0.5866, loss: 1.1377, grad_norm: 1.8353
+2023-02-03 12:00:05,730 - mmdet - INFO - Epoch [12][300/834]	lr: 1.000e-04, eta: 0:02:59, time: 0.333, data_time: 0.009, memory: 3188, loss_cls: 0.2576, loss_bbox: 0.2951, loss_centerness: 0.5878, loss: 1.1404, grad_norm: 1.9167
+2023-02-03 12:00:22,276 - mmdet - INFO - Epoch [12][350/834]	lr: 1.000e-04, eta: 0:02:43, time: 0.331, data_time: 0.008, memory: 3188, loss_cls: 0.2592, loss_bbox: 0.2942, loss_centerness: 0.5885, loss: 1.1420, grad_norm: 1.9313
+2023-02-03 12:00:39,115 - mmdet - INFO - Epoch [12][400/834]	lr: 1.000e-04, eta: 0:02:26, time: 0.337, data_time: 0.009, memory: 3188, loss_cls: 0.2582, loss_bbox: 0.2938, loss_centerness: 0.5880, loss: 1.1400, grad_norm: 1.9215
+2023-02-03 12:00:55,881 - mmdet - INFO - Epoch [12][450/834]	lr: 1.000e-04, eta: 0:02:09, time: 0.335, data_time: 0.009, memory: 3188, loss_cls: 0.2634, loss_bbox: 0.2989, loss_centerness: 0.5874, loss: 1.1496, grad_norm: 2.0361
+2023-02-03 12:01:12,627 - mmdet - INFO - Epoch [12][500/834]	lr: 1.000e-04, eta: 0:01:52, time: 0.335, data_time: 0.009, memory: 3188, loss_cls: 0.2595, loss_bbox: 0.2927, loss_centerness: 0.5867, loss: 1.1390, grad_norm: 2.0361
+2023-02-03 12:01:29,438 - mmdet - INFO - Epoch [12][550/834]	lr: 1.000e-04, eta: 0:01:35, time: 0.336, data_time: 0.009, memory: 3188, loss_cls: 0.2656, loss_bbox: 0.2973, loss_centerness: 0.5880, loss: 1.1509, grad_norm: 2.0388
+2023-02-03 12:01:46,151 - mmdet - INFO - Epoch [12][600/834]	lr: 1.000e-04, eta: 0:01:18, time: 0.334, data_time: 0.008, memory: 3188, loss_cls: 0.2628, loss_bbox: 0.2897, loss_centerness: 0.5883, loss: 1.1408, grad_norm: 2.0292
+2023-02-03 12:02:02,903 - mmdet - INFO - Epoch [12][650/834]	lr: 1.000e-04, eta: 0:01:01, time: 0.335, data_time: 0.008, memory: 3188, loss_cls: 0.2655, loss_bbox: 0.2957, loss_centerness: 0.5889, loss: 1.1501, grad_norm: 2.0037
+2023-02-03 12:02:19,616 - mmdet - INFO - Epoch [12][700/834]	lr: 1.000e-04, eta: 0:00:45, time: 0.334, data_time: 0.008, memory: 3188, loss_cls: 0.2622, loss_bbox: 0.2960, loss_centerness: 0.5887, loss: 1.1470, grad_norm: 1.8326
+2023-02-03 12:02:36,390 - mmdet - INFO - Epoch [12][750/834]	lr: 1.000e-04, eta: 0:00:28, time: 0.335, data_time: 0.009, memory: 3188, loss_cls: 0.2581, loss_bbox: 0.2963, loss_centerness: 0.5868, loss: 1.1412, grad_norm: 1.9141
+2023-02-03 12:02:53,088 - mmdet - INFO - Epoch [12][800/834]	lr: 1.000e-04, eta: 0:00:11, time: 0.334, data_time: 0.008, memory: 3188, loss_cls: 0.2493, loss_bbox: 0.2929, loss_centerness: 0.5875, loss: 1.1298, grad_norm: 1.9766
+2023-02-03 12:03:05,041 - mmdet - INFO - Saving checkpoint at 12 epochs
+2023-02-03 12:03:31,853 - mmdet - INFO - Evaluating bbox...
+2023-02-03 12:03:43,892 - mmdet - INFO - Exp name: fcos_r50_caffe_fpn_gn-head_1x_coco_comparison.py
+2023-02-03 12:03:43,892 - mmdet - INFO - Epoch(val) [12][186]	bbox_mAP: 0.2270, bbox_mAP_50: 0.4480, bbox_mAP_75: 0.1970, bbox_mAP_s: 0.0080, bbox_mAP_m: 0.1230, bbox_mAP_l: 0.2370, bbox_mAP_copypaste: 0.227 0.448 0.197 0.008 0.123 0.237
