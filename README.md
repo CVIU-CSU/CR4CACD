@@ -49,10 +49,11 @@ Cascade RRAM and GRAM (multi-scale training) | 29.1 | 56.2 | 27.1
 
 ## Citation
 ```
-@article{liang2022exploring,
-  title={Exploring Contextual Relationships for Cervical Abnormal Cell Detection},
-  author={Yixiong Liang and Shuo Feng and Qing Liu and Hulin Kuang and Liyan Liao and Yun Du and Nanying Che amd Jianfeng Liu and Jianxin Wang},
-  journal={arXiv preprint arXiv:2207.04693},
-  year={2022}
+@article{liang2023exploring,
+  title={Exploring contextual relationships for cervical abnormal cell detection},
+  author={Liang, Yixiong and Feng, Shuo and Liu, Qing and Kuang, Hulin and Liu, Jianfeng and Liao, Liyan and Du, Yun and Wang, Jianxin},
+  journal={IEEE Journal of Biomedical and Health Informatics},
+  year={2023},
+  publisher={IEEE}
 }
 ```
