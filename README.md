@@ -36,6 +36,15 @@ GRAM | 31.9 | 56.2 | 33.1
 Cascade RRAM and GRAM | 32.4 | 56.6 | 33.5
 Cascade RRAM and GRAM (multi-scale training) | 34.2 | 58.6 | 36.0 
 
+Model | ASCUS | ASCH | LSIL | HSIL | AGC | VAG | MON | DYS | EC | AP
+--- |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:
+Faster R-CNN with FPN | 29.9 | 22.2 | 30.9 | 33.2 | 42.4 | 28.8 | 19.1 | 50.3 | 18.7 | 30.6 
+Double-Head Faster R-CNN (baseline) | 30.4 | 22.7 | 31.2 | 33.3 | 42.8 | 29.1 | 18.4 | 51.1 | 19.2 | 30.9
+RRAM | 32.1 | 24.1 | 31.8 | 33.7 | 43.9 | 29.5 | 19.5 | 52.9 | 20.3 | 32.0
+GRAM | 32.2 | 23.3 | 31.7 | 33.3 | 44.1 | 29.5 | 19.7 | 53.1 | 20.5 | 31.9 
+Cascade RRAM and GRAM | 32.2 | 24.1 | 32.9 | 34.0 | 44.4 | 29.7 | 20.6 | 53.4 | 20.7 | 32.4
+Cascade RRAM and GRAM (multi-scale training) | 35.2 | 25.3 | 34.5 | 35.6 | 46.2 | 29.8 | 22.0 | 56.0 | 22.8 | 34.2
+
 ### On ComparisonDetector dataset
 
 Train log files are in [work_dirs_comparison](/work_dirs_comparison).
@@ -46,6 +55,7 @@ Faster R-CNN with FPN | 20.3 | 46.0 | 15.5
 Double-Head Faster R-CNN (baseline) | 23.3 | 49.6 | 19.2
 Cascade RRAM and GRAM | 28.2 | 56.2 | 25.6
 Cascade RRAM and GRAM (multi-scale training) | 29.1 | 56.2 | 27.1 
+
 
 ## Citation
 ```
